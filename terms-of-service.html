@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — GraamCredit</title>
+  <meta name="description" content="GraamCredit Terms of Service. An educational student project — not a registered NBFC." />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-icon">G</span>
+        <span>GraamCredit</span>
+      </a>
+      <div class="navbar-links">
+        <a href="how-it-works.html" id="nav-hiw" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+        <a href="faq.html" id="nav-faq" data-en="FAQ" data-hi="FAQ">FAQ</a>
+        <a href="contact-us.html" data-en="Contact" data-hi="संपर्क">Contact</a>
+      </div>
+      <div class="navbar-right">
+        <button class="lang-toggle-pill" id="langToggle" onclick="toggleLanguage()">
+          <span id="langLabel">EN | हिंदी</span>
+        </button>
+        <a href="form.html" class="btn btn-primary btn-sm rounded-pill" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+        <button class="navbar-hamburger" id="hamburgerBtn" aria-label="Open menu">
+          <i class="ri-menu-3-line"></i>
+        </button>
+      </div>
+    </div>
+    <div class="navbar-mobile-menu" id="mobileMenu">
+      <a href="how-it-works.html" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+      <a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a>
+      <a href="contact-us.html" data-en="Contact" data-hi="संपर्क">Contact</a>
+      <a href="form.html" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="inner-hero">
+    <div class="container inner-hero-content">
+      <span class="inner-hero-pill" data-en="LEGAL" data-hi="कानूनी">LEGAL</span>
+      <h1 data-en="Terms of Service" data-hi="सेवा की शर्तें">Terms of Service</h1>
+      <p data-en="Last updated: January 2025 · Please read carefully before using GraamCredit" data-hi="अंतिम अपडेट: जनवरी 2025 · कृपया ग्रामक्रेडिट का उपयोग करने से पहले ध्यान से पढ़ें">Last updated: January 2025 · Please read carefully before using GraamCredit</p>
+    </div>
+  </section>
+
+  <!-- Disclaimer Banner -->
+  <div class="container">
+    <div class="disclaimer-banner" style="margin-top: 32px;">
+      <i class="ri-error-warning-line"></i>
+      <div>
+        <p class="disclaimer-banner-title" data-en="Educational Project Disclaimer" data-hi="शैक्षिक परियोजना अस्वीकरण">Educational Project Disclaimer</p>
+        <p class="disclaimer-banner-body" data-en="GraamCredit is a student social project built for internship demonstration purposes. It is NOT a registered NBFC, bank, or financial institution. No real loans are disbursed. This tool provides eligibility estimates only." data-hi="ग्रामक्रेडिट एक छात्र सामाजिक परियोजना है जिसे इंटर्नशिप प्रदर्शन उद्देश्यों के लिए बनाया गया है। यह एक पंजीकृत एनबीएफसी, बैंक या वित्तीय संस्थान नहीं है। कोई वास्तविक ऋण वितरित नहीं किया जाता है। यह उपकरण केवल पात्रता अनुमान प्रदान करता है।">GraamCredit is a student social project built for internship demonstration purposes. It is <strong>NOT</strong> a registered NBFC, bank, or financial institution. No real loans are disbursed. This tool provides eligibility estimates only.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Mobile dropdown -->
+    <div class="legal-toc-mobile">
+      <select id="tocSelect">
+        <option value="" data-en="Jump to section…" data-hi="अनुभाग पर जाएं…">Jump to section…</option>
+        <option value="#tos-s1" data-en="1. Acceptance of Terms" data-hi="1. शर्तों की स्वीकृति">1. Acceptance of Terms</option>
+        <option value="#tos-s2" data-en="2. Nature of the Service" data-hi="2. सेवा की प्रकृति">2. Nature of the Service</option>
+        <option value="#tos-s3" data-en="3. User Responsibilities" data-hi="3. उपयोगकर्ता की जिम्मेदारियां">3. User Responsibilities</option>
+        <option value="#tos-s4" data-en="4. Intellectual Property" data-hi="4. बौद्धिक संपदा">4. Intellectual Property</option>
+        <option value="#tos-s5" data-en="5. Limitation of Liability" data-hi="5. देयता की सीमा">5. Limitation of Liability</option>
+        <option value="#tos-s6" data-en="6. Governing Law" data-hi="6. शासी कानून">6. Governing Law</option>
+        <option value="#tos-s7" data-en="7. Modifications" data-hi="7. संशोधन">7. Modifications</option>
+        <option value="#tos-s8" data-en="8. Contact" data-hi="8. संपर्क">8. Contact</option>
+      </select>
+    </div>
+
+    <div class="legal-layout">
+      <!-- Sidebar TOC -->
+      <nav class="legal-toc" aria-label="Table of contents">
+        <p class="legal-toc-title" data-en="On this page" data-hi="इस पृष्ठ पर">On this page</p>
+        <ul class="legal-toc-list" id="tocList">
+          <li><a href="#tos-s1" data-en="1. Acceptance of Terms" data-hi="1. शर्तों की स्वीकृति">1. Acceptance of Terms</a></li>
+          <li><a href="#tos-s2" data-en="2. Nature of the Service" data-hi="2. सेवा की प्रकृति">2. Nature of the Service</a></li>
+          <li><a href="#tos-s3" data-en="3. User Responsibilities" data-hi="3. उपयोगकर्ता की जिम्मेदारियां">3. User Responsibilities</a></li>
+          <li><a href="#tos-s4" data-en="4. Intellectual Property" data-hi="4. बौद्धिक संपदा">4. Intellectual Property</a></li>
+          <li><a href="#tos-s5" data-en="5. Limitation of Liability" data-hi="5. देयता की सीमा">5. Limitation of Liability</a></li>
+          <li><a href="#tos-s6" data-en="6. Governing Law" data-hi="6. शासी कानून">6. Governing Law</a></li>
+          <li><a href="#tos-s7" data-en="7. Modifications" data-hi="7. संशोधन">7. Modifications</a></li>
+          <li><a href="#tos-s8" data-en="8. Contact" data-hi="8. संपर्क">8. Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Content -->
+      <div class="legal-content">
+
+        <section class="legal-section" id="tos-s1">
+          <h2 class="legal-section-heading" data-en="1. Acceptance of Terms" data-hi="1. शर्तों की स्वीकृति">1. Acceptance of Terms</h2>
+          <p data-en="By accessing or using GraamCredit (&quot;the Service&quot;), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service. These terms apply to all visitors, applicants, and users of the platform." data-hi="ग्रामक्रेडिट (&quot;सेवा&quot;) का उपयोग करके, आप इन सेवा की शर्तों से बाध्य होने के लिए सहमत हैं। यदि आप सहमत नहीं हैं, तो कृपया सेवा का उपयोग न करें। ये शर्तें मंच के सभी आगंतुकों, आवेदकों और उपयोगकर्ताओं पर लागू होती हैं।">By accessing or using GraamCredit ("the Service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service. These terms apply to all visitors, applicants, and users of the platform.</p>
+        </section>
+
+        <section class="legal-section" id="tos-s2">
+          <h2 class="legal-section-heading" data-en="2. Nature of the Service" data-hi="2. सेवा की प्रकृति">2. Nature of the Service</h2>
+          <p data-en="GraamCredit provides:" data-hi="ग्रामक्रेडिट प्रदान करता है:">GraamCredit provides:</p>
+          <ul>
+            <li data-en="An AI-based eligibility assessment tool for microloan applicability" data-hi="माइक्रोलोन प्रयोज्यता के लिए एक एआई-आधारित पात्रता मूल्यांकन उपकरण">An AI-based eligibility assessment tool for microloan applicability</li>
+            <li data-en="An educational demonstration of alternative credit scoring methods" data-hi="वैकल्पिक क्रेडिट स्कोरिंग विधियों का एक शैक्षिक प्रदर्शन">An educational demonstration of alternative credit scoring methods</li>
+            <li data-en="A prototype built to showcase responsible fintech design" data-hi="जिम्मेदार फिनटेक डिजाइन को प्रदर्शित करने के लिए बनाया गया एक प्रोटोटाइप">A prototype built to showcase responsible fintech design</li>
+          </ul>
+          <p data-en="GraamCredit does NOT provide:" data-hi="ग्रामक्रेडिट प्रदान नहीं करता है:">GraamCredit does <strong>NOT</strong> provide:</p>
+          <ul>
+            <li data-en="Actual loan disbursement or financial services" data-hi="वास्तविक ऋण संवितरण या वित्तीय सेवाएं">Actual loan disbursement or financial services</li>
+            <li data-en="Guaranteed loan approvals or rejections from any institution" data-hi="किसी भी संस्थान से गारंटीकृत ऋण स्वीकृति या अस्वीकृति">Guaranteed loan approvals or rejections from any institution</li>
+            <li data-en="Legal, financial, or investment advice of any kind" data-hi="किसी भी प्रकार की कानूनी, वित्तीय या निवेश सलाह">Legal, financial, or investment advice of any kind</li>
+          </ul>
+          <div class="legal-highlight" data-en="A positive result from GraamCredit does NOT guarantee loan approval from any bank or MFI. Always consult a registered financial institution." data-hi="ग्रामक्रेडिट से सकारात्मक परिणाम किसी भी बैंक या एमएफआई से ऋण स्वीकृति की गारंटी नहीं देता है। हमेशा एक पंजीकृत वित्तीय संस्थान से परामर्श करें।">
+            A positive result from GraamCredit does NOT guarantee loan approval from any bank or MFI. Always consult a registered financial institution.
+          </div>
+        </section>
+
+        <section class="legal-section" id="tos-s3">
+          <h2 class="legal-section-heading" data-en="3. User Responsibilities" data-hi="3. उपयोगकर्ता की जिम्मेदारियां">3. User Responsibilities</h2>
+          <p data-en="You agree to:" data-hi="आप सहमत हैं कि:">You agree to:</p>
+          <ul>
+            <li data-en="Provide accurate and truthful information in all form fields" data-hi="सभी फॉर्म क्षेत्रों में सटीक और सच्ची जानकारी प्रदान करें">Provide accurate and truthful information in all form fields</li>
+            <li data-en="Not impersonate another person or submit fraudulent documents" data-hi="किसी अन्य व्यक्ति का रूप धारण न करें या धोखाधड़ी वाले दस्तावेज़ जमा न करें">Not impersonate another person or submit fraudulent documents</li>
+            <li data-en="Use the platform only for personal eligibility assessment" data-hi="केवल व्यक्तिगत पात्रता मूल्यांकन के लिए मंच का उपयोग करें">Use the platform only for personal eligibility assessment</li>
+            <li data-en="Not attempt to reverse-engineer, scrape, or misuse the scoring system" data-hi="स्कोरिंग सिस्टम को रिवर्स-इंजीनियर, स्क्रैप या दुरुपयोग करने का प्रयास न करें">Not attempt to reverse-engineer, scrape, or misuse the scoring system</li>
+            <li data-en="Be at least 18 years of age to use this service" data-hi="इस सेवा का उपयोग करने के लिए कम से कम 18 वर्ष की आयु का होना चाहिए">Be at least 18 years of age to use this service</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" id="tos-s4">
+          <h2 class="legal-section-heading" data-en="4. Intellectual Property" data-hi="4. बौद्धिक संपदा">4. Intellectual Property</h2>
+          <p data-en="All content on GraamCredit — including the name, logo, UI design, scoring algorithm, and written content — is the intellectual property of the project creators. You may not reproduce, redistribute, or commercially use any part of this platform without written permission." data-hi="ग्रामक्रेडिट पर सभी सामग्री — नाम, लोगो, यूआई डिज़ाइन, स्कोरिंग एल्गोरिदम और लिखित सामग्री सहित — परियोजना निर्माताओं की बौद्धिक संपदा है। आप लिखित अनुमति के बिना इस मंच के किसी भी हिस्से को पुनरुत्पादित, पुनर्वितरित या व्यावसायिक रूप से उपयोग नहीं कर सकते हैं।">All content on GraamCredit — including the name, logo, UI design, scoring algorithm, and written content — is the intellectual property of the project creators. You may not reproduce, redistribute, or commercially use any part of this platform without written permission.</p>
+        </section>
+
+        <section class="legal-section" id="tos-s5">
+          <h2 class="legal-section-heading" data-en="5. Limitation of Liability" data-hi="5. देयता की सीमा">5. Limitation of Liability</h2>
+          <p data-en="To the maximum extent permitted by law, GraamCredit and its creators shall not be liable for:" data-hi="कानून द्वारा अनुमत अधिकतम सीमा तक, ग्रामक्रेडिट और उसके निर्माता इसके लिए उत्तरदायी नहीं होंगे:">To the maximum extent permitted by law, GraamCredit and its creators shall not be liable for:</p>
+          <ul>
+            <li data-en="Any financial decisions made based on the eligibility result" data-hi="पात्रता परिणाम के आधार पर लिए गए कोई भी वित्तीय निर्णय">Any financial decisions made based on the eligibility result</li>
+            <li data-en="Inaccuracies in the AI scoring model" data-hi="एआई स्कोरिंग मॉडल में अशुद्धियां">Inaccuracies in the AI scoring model</li>
+            <li data-en="Loss of data due to technical failure" data-hi="तकनीकी खराबी के कारण डेटा का नुकसान">Loss of data due to technical failure</li>
+            <li data-en="Actions taken by third-party financial institutions" data-hi="तृतीय-पक्ष वित्तीय संस्थानों द्वारा की गई कार्रवाइयाँ">Actions taken by third-party financial institutions</li>
+          </ul>
+          <p data-en="This service is provided &quot;as is&quot; without warranty of any kind." data-hi="यह सेवा बिना किसी वारंटी के &quot;जैसी है वैसी&quot; प्रदान की जाती है।">This service is provided "as is" without warranty of any kind.</p>
+        </section>
+
+        <section class="legal-section" id="tos-s6">
+          <h2 class="legal-section-heading" data-en="6. Governing Law" data-hi="6. शासी कानून">6. Governing Law</h2>
+          <p data-en="These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Uttar Pradesh, India." data-hi="ये शर्तें भारत के कानूनों द्वारा शासित हैं। कोई भी विवाद उत्तर प्रदेश, भारत में अदालतों के अनन्य क्षेत्राधिकार के अधीन होगा।">These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Uttar Pradesh, India.</p>
+        </section>
+
+        <section class="legal-section" id="tos-s7">
+          <h2 class="legal-section-heading" data-en="7. Modifications" data-hi="7. संशोधन">7. Modifications</h2>
+          <p data-en="We reserve the right to update these Terms at any time. Material changes will be notified on the homepage 14 days in advance." data-hi="हम किसी भी समय इन शर्तों को अपडेट करने का अधिकार सुरक्षित रखते हैं। महत्वपूर्ण परिवर्तनों की सूचना होमपेज पर 14 दिन पहले दी जाएगी।">We reserve the right to update these Terms at any time. Material changes will be notified on the homepage 14 days in advance.</p>
+        </section>
+
+        <section class="legal-section" id="tos-s8">
+          <h2 class="legal-section-heading" data-en="8. Contact" data-hi="8. संपर्क">8. Contact</h2>
+          <p>
+            <span data-en="For questions about these Terms:" data-hi="इन शर्तों के बारे में प्रश्नों के लिए:">For questions about these Terms:</span><br>
+            <strong>Email:</strong> <a href="mailto:legal@graamcredit.in">legal@graamcredit.in</a>
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <a href="index.html" class="footer-logo">
+            <span class="logo-icon">G</span><span>GraamCredit</span>
+          </a>
+          <p class="footer-tagline" data-en="AI-powered microloan eligibility for rural India" data-hi="ग्रामीण भारत के लिए AI-संचालित माइक्रोलोन पात्रता">AI-powered microloan eligibility for rural India</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="ri-linkedin-line"></i></a>
+            <a href="#" aria-label="GitHub"><i class="ri-github-line"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Product" data-hi="उत्पाद">Product</p>
+          <ul class="footer-nav-list">
+            <li><a href="how-it-works.html" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a></li>
+            <li><a href="form.html" data-en="Check eligibility" data-hi="पात्रता की जांच करें">Check eligibility</a></li>
+            <li><a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Company" data-hi="कंपनी">Company</p>
+          <ul class="footer-nav-list">
+            <li><a href="privacy-policy.html" data-en="Privacy Policy" data-hi="गोपनीयता नीति">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html" data-en="Terms of Service" data-hi="सेवा की शर्तें">Terms of Service</a></li>
+            <li><a href="contact-us.html" data-en="Contact Us" data-hi="संपर्क करें">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Compliance" data-hi="अनुपालन">Compliance</p>
+          <ul class="footer-compliance-list">
+            <li data-en="RBI Master Directions 2022" data-hi="RBI मास्टर निर्देश 2022">RBI Master Directions 2022</li>
+            <li data-en="India DPDP Act 2023" data-hi="भारत DPDP अधिनियम 2023">India DPDP Act 2023</li>
+            <li data-en="Collateral-free per RBI guidelines" data-hi="RBI दिशानिर्देशों के अनुसार संपार्श्विक-मुक्त">Collateral-free per RBI guidelines</li>
+            <li data-en="Data encrypted at rest + transit" data-hi="डेटा आराम + पारगमन में एन्क्रिप्टेड">Data encrypted at rest + transit</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-en="© 2025 GraamCredit. Built as a student social project." data-hi="© 2025 ग्रामक्रेडिट। एक छात्र सामाजिक परियोजना के रूप में निर्मित।">© 2025 GraamCredit. Built as a student social project.</p>
+        <p data-en="Not a registered NBFC. For educational purposes only." data-hi="पंजीकृत NBFC नहीं। केवल शैक्षिक उद्देश्यों के लिए।">Not a registered NBFC. For educational purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="lang-config.js"></script>
+  <script>
+    const sections = document.querySelectorAll('.legal-section');
+    const tocLinks = document.querySelectorAll('.legal-toc-list a');
+    window.addEventListener('scroll', function() {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+      tocLinks.forEach(a => { a.classList.toggle('toc-active', a.getAttribute('href') === '#' + current); });
+    });
+    document.getElementById('tocSelect').addEventListener('change', function() {
+      const target = document.querySelector(this.value);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
+

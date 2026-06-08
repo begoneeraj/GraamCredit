@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GraamCredit — Rural Microloan Eligibility</title>
+  <meta name="description" content="GraamCredit helps low-income borrowers in rural India check their microloan eligibility. Quick, secure, and collateral-free." />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand" id="nav-brand">
+        <span class="logo-icon">G</span>
+        <span>GraamCredit</span>
+      </a>
+      <div class="navbar-links">
+        <a href="how-it-works.html" id="nav-hiw" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+        <a href="faq.html" id="nav-faq" data-en="FAQ" data-hi="FAQ">FAQ</a>
+        <a href="contact-us.html" id="nav-contact" data-en="Contact" data-hi="संपर्क">Contact</a>
+      </div>
+      <div class="navbar-right">
+        <button class="lang-toggle-pill" id="langToggle" onclick="toggleLanguage()">
+          <span id="langLabel">EN | हिंदी</span>
+        </button>
+        <a href="form.html" class="btn btn-primary btn-sm rounded-pill" id="navApplyBtn" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+        <button class="navbar-hamburger" id="hamburgerBtn" aria-label="Open menu">
+          <i class="ri-menu-3-line"></i>
+        </button>
+      </div>
+    </div>
+    <div class="navbar-mobile-menu" id="mobileMenu">
+      <a href="how-it-works.html" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+      <a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a>
+      <a href="contact-us.html" data-en="Contact" data-hi="संपर्क">Contact</a>
+      <a href="form.html" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero fintech-hero" id="hero-section">
+    <div class="hero-pattern"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <h1 id="heroTitle" data-en="Microloan milega, bina bank ke" data-hi="माइक्रोलोन मिलेगा, बिना बैंक के">Microloan milega, bina bank ke</h1>
+        <p class="tagline" id="heroTagline" data-en="AI-powered credit scoring for rural India. No collateral. No branch visits." data-hi="ग्रामीण भारत के लिए AI-संचालित क्रेडिट स्कोरिंग। कोई जमानत नहीं। कोई बैंक शाखा का दौरा नहीं।">AI-powered credit scoring for rural India. No collateral. No branch visits.</p>
+        <div class="hero-actions">
+          <a href="form.html" class="btn btn-white" id="ctaApply" data-en="Check Eligibility" data-hi="पात्रता जांचें">Check Eligibility</a>
+          <a href="how-it-works.html" class="btn btn-outline-white" id="ctaHowItWorks" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+        </div>
+      </div>
+      <div class="hero-mockup">
+        <div class="mockup-card">
+          <div class="mockup-header">
+            <span class="mockup-title" data-en="Credit Score" data-hi="क्रेडिट स्कोर">Credit Score</span>
+            <span class="mockup-score-text">74/100</span>
+          </div>
+          <div class="mockup-arc">
+            <div class="arc-fill"></div>
+          </div>
+          <div class="mockup-pills">
+            <div class="status-pill"><span class="pill-icon">✓</span> <span data-en="Age verified" data-hi="आयु सत्यापित">Age verified</span></div>
+            <div class="status-pill"><span class="pill-icon">✓</span> <span data-en="Income OK" data-hi="आय ठीक है">Income OK</span></div>
+            <div class="status-pill"><span class="pill-icon">⚡</span> <span data-en="UPI Active" data-hi="UPI सक्रिय">UPI Active</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features-section">
+    <div class="container">
+      <div class="features-header">
+        <span class="pill-label" data-en="BUILT FOR RURAL INDIA" data-hi="ग्रामीण भारत के लिए विशेष">BUILT FOR RURAL INDIA</span>
+        <h2 class="features-title" data-en="Why Choose GraamCredit?" data-hi="ग्रामक्रेडिट क्यों चुनें?">Why Choose GraamCredit?</h2>
+        <p class="features-subheading" data-en="Simple, transparent, and built to empower rural communities." data-hi="सरल, पारदर्शी और ग्रामीण समुदायों को सशक्त बनाने के लिए निर्मित।">Simple, transparent, and built to empower rural communities.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card fintech-card card-secure">
+          <div class="feature-badge"><i class="ri-shield-check-line badge-icon"></i></div>
+          <div class="feature-text">
+            <h3 data-en="Secure &amp; Private" data-hi="सुरक्षित और निजी">Secure &amp; Private</h3>
+            <p data-en="Bank-grade encryption. Data deleted after decision." data-hi="बैंक-स्तरीय एन्क्रिप्शन। निर्णय के बाद डेटा डिलीट कर दिया जाता है।">Bank-grade encryption. Data deleted after decision.</p>
+          </div>
+        </div>
+        <div class="feature-card fintech-card card-ai">
+          <div class="feature-badge"><i class="ri-brain-line badge-icon"></i></div>
+          <div class="feature-text">
+            <h3 data-en="AI Scoring" data-hi="AI स्कोरिंग">AI Scoring</h3>
+            <p data-en="Scores beyond CIBIL — uses UPI, mobile, and income data." data-hi="CIBIL से अलग स्कोर — UPI, मोबाइल और आय डेटा का उपयोग।">Scores beyond CIBIL — uses UPI, mobile, and income data.</p>
+          </div>
+        </div>
+        <div class="feature-card fintech-card card-speed">
+          <div class="feature-badge"><i class="ri-timer-flash-line badge-icon"></i></div>
+          <div class="feature-text">
+            <h3 data-en="5-Minute Process" data-hi="5-मिनट की प्रक्रिया">5-Minute Process</h3>
+            <p data-en="Apply from your phone. No branch visit, no paperwork." data-hi="अपने फोन से आवेदन करें। न कोई शाखा जाना, न कागजी कार्रवाई।">Apply from your phone. No branch visit, no paperwork.</p>
+          </div>
+        </div>
+        <div class="feature-card fintech-card card-collateral">
+          <div class="feature-badge"><i class="ri-hand-coin-line badge-icon"></i></div>
+          <div class="feature-text">
+            <h3 data-en="No Collateral" data-hi="कोई ज़मानत नहीं">No Collateral</h3>
+            <p data-en="No property or guarantor needed. Zero hidden charges." data-hi="कोई संपत्ति या गारंटर आवश्यक नहीं। शून्य छिपे हुए शुल्क।">No property or guarantor needed. Zero hidden charges.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Eligibility Strip -->
+  <section class="eligibility-section">
+    <div class="container">
+      <div class="eligibility-dark-card">
+        <h2 id="eligTitle" data-en="Basic Requirements" data-hi="मूल आवश्यकताएं">Basic Requirements</h2>
+        <div class="eligibility-pills">
+          <div class="elig-pill" data-en="Age 18+" data-hi="आयु १८+">Age 18+</div>
+          <div class="elig-pill" data-en="Income ≤ ₹3L" data-hi="आय ≤ ₹3L">Income ≤ ₹3L</div>
+          <div class="elig-pill" data-en="No Active Loan" data-hi="कोई सक्रिय ऋण नहीं">No Active Loan</div>
+          <div class="elig-pill" data-en="Valid KYC" data-hi="वैध केवाईसी">Valid KYC</div>
+          <div class="elig-pill" data-en="Debt < 50%" data-hi="ऋण < 50%">Debt &lt; 50%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta-section">
+    <div class="container">
+      <h2 id="ctaTitle" data-en="Ready to Check Your Eligibility?" data-hi="अपनी पात्रता जांचने के लिए तैयार?">Ready to Check Your Eligibility?</h2>
+      <p id="ctaSubtitle" data-en="It only takes 5 minutes. No impact on your credit score." data-hi="इसमें केवल 5 मिनट लगते हैं। आपके क्रेडिट स्कोर पर कोई प्रभाव नहीं।">It only takes 5 minutes. No impact on your credit score.</p>
+      <a href="form.html" class="btn btn-primary btn-lg rounded-pill" id="ctaApply2" data-en="Start Application" data-hi="आवेदन शुरू करें">Start Application</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <a href="index.html" class="footer-logo">
+            <span class="logo-icon">G</span>
+            <span>GraamCredit</span>
+          </a>
+          <p class="footer-tagline" data-en="AI-powered microloan eligibility for rural India" data-hi="ग्रामीण भारत के लिए AI-संचालित माइक्रोलोन पात्रता">AI-powered microloan eligibility for rural India</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="ri-linkedin-line"></i></a>
+            <a href="#" aria-label="GitHub"><i class="ri-github-line"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Product" data-hi="उत्पाद">Product</p>
+          <ul class="footer-nav-list">
+            <li><a href="how-it-works.html" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a></li>
+            <li><a href="form.html" data-en="Check eligibility" data-hi="पात्रता की जांच करें">Check eligibility</a></li>
+            <li><a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Company" data-hi="कंपनी">Company</p>
+          <ul class="footer-nav-list">
+            <li><a href="privacy-policy.html" data-en="Privacy Policy" data-hi="गोपनीयता नीति">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html" data-en="Terms of Service" data-hi="सेवा की शर्तें">Terms of Service</a></li>
+            <li><a href="contact-us.html" data-en="Contact Us" data-hi="संपर्क करें">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Compliance" data-hi="अनुपालन">Compliance</p>
+          <ul class="footer-compliance-list">
+            <li data-en="RBI Master Directions 2022" data-hi="RBI मास्टर निर्देश 2022">RBI Master Directions 2022</li>
+            <li data-en="India DPDP Act 2023" data-hi="भारत DPDP अधिनियम 2023">India DPDP Act 2023</li>
+            <li data-en="Collateral-free per RBI guidelines" data-hi="RBI दिशानिर्देशों के अनुसार संपार्श्विक-मुक्त">Collateral-free per RBI guidelines</li>
+            <li data-en="Data encrypted at rest + transit" data-hi="डेटा आराम + पारगमन में एन्क्रिप्टेड">Data encrypted at rest + transit</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-en="© 2025 GraamCredit. Built as a student social project." data-hi="© 2025 ग्रामक्रेडिट। एक छात्र सामाजिक परियोजना के रूप में निर्मित।">© 2025 GraamCredit. Built as a student social project.</p>
+        <p data-en="Not a registered NBFC. For educational purposes only." data-hi="पंजीकृत NBFC नहीं। केवल शैक्षिक उद्देश्यों के लिए।">Not a registered NBFC. For educational purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="lang-config.js"></script>
+</body>
+</html>
+

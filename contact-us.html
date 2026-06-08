@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — GraamCredit</title>
+  <meta name="description" content="Get in touch with the GraamCredit student team. We reply to every message within 24 hours." />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-icon">G</span>
+        <span>GraamCredit</span>
+      </a>
+      <div class="navbar-links">
+        <a href="how-it-works.html" id="nav-hiw" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+        <a href="faq.html" id="nav-faq" data-en="FAQ" data-hi="FAQ">FAQ</a>
+        <a href="contact-us.html" data-en="Contact" data-hi="संपर्क">Contact</a>
+      </div>
+      <div class="navbar-right">
+        <button class="lang-toggle-pill" id="langToggle" onclick="toggleLanguage()">
+          <span id="langLabel">EN | हिंदी</span>
+        </button>
+        <a href="form.html" class="btn btn-primary btn-sm rounded-pill" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+        <button class="navbar-hamburger" id="hamburgerBtn" aria-label="Open menu">
+          <i class="ri-menu-3-line"></i>
+        </button>
+      </div>
+    </div>
+    <div class="navbar-mobile-menu" id="mobileMenu">
+      <a href="how-it-works.html" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+      <a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a>
+      <a href="contact-us.html" data-en="Contact" data-hi="संपर्क">Contact</a>
+      <a href="form.html" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="inner-hero">
+    <div class="container inner-hero-content">
+      <span class="inner-hero-pill" data-en="GET IN TOUCH" data-hi="संपर्क में रहें">GET IN TOUCH</span>
+      <h1 data-en="Contact Us" data-hi="संपर्क करें">Contact Us</h1>
+      <p data-en="We're a student team. We read every message and reply within 24 hours." data-hi="हम एक छात्र टीम हैं। हम प्रत्येक संदेश को पढ़ते हैं और 24 घंटे के भीतर उत्तर देते हैं।">We're a student team. We read every message and reply within 24 hours.</p>
+    </div>
+  </section>
+
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="contact-layout">
+
+      <!-- Left: Info cards -->
+      <div class="contact-info-col">
+
+        <div class="contact-card">
+          <div class="contact-card-icon" style="background:#F0FDF4; color:#22C55E;">
+            <i class="ri-customer-service-2-line"></i>
+          </div>
+          <p class="contact-card-title" data-en="General Support" data-hi="सामान्य सहायता">General Support</p>
+          <p class="contact-card-body" data-en="Questions about eligibility, your score, or how the app works." data-hi="पात्रता, आपके स्कोर, या ऐप कैसे काम करता है, इसके बारे में प्रश्न।">Questions about eligibility, your score, or how the app works.</p>
+          <a href="mailto:support@graamcredit.in" class="contact-card-email">support@graamcredit.in</a>
+          <p class="contact-card-response" data-en="Usually within 24 hours" data-hi="आमतौर पर 24 घंटे के भीतर">Usually within 24 hours</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon" style="background:#EEF2FF; color:#6366F1;">
+            <i class="ri-shield-line"></i>
+          </div>
+          <p class="contact-card-title" data-en="Privacy &amp; Data Requests" data-hi="गोपनीयता और डेटा अनुरोध">Privacy &amp; Data Requests</p>
+          <p class="contact-card-body" data-en="To access, correct, or delete your personal data per DPDP Act 2023." data-hi="DPDP अधिनियम 2023 के तहत अपने व्यक्तिगत डेटा तक पहुँचने, ठीक करने या हटाने के लिए।">To access, correct, or delete your personal data per DPDP Act 2023.</p>
+          <a href="mailto:privacy@graamcredit.in" class="contact-card-email">privacy@graamcredit.in</a>
+          <p class="contact-card-response" data-en="Within 7 business days (legal requirement)" data-hi="7 व्यावसायिक दिनों के भीतर (कानूनी आवश्यकता)">Within 7 business days (legal requirement)</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon" style="background:#FFF4E5; color:#F59E0B;">
+            <i class="ri-briefcase-line"></i>
+          </div>
+          <p class="contact-card-title" data-en="Project Collaboration" data-hi="परियोजना सहयोग">Project Collaboration</p>
+          <p class="contact-card-body" data-en="Internship inquiries, academic partnerships, or feedback on the project." data-hi="इंटर्नशिप पूछताछ, शैक्षणिक साझेदारी, या परियोजना पर प्रतिक्रिया।">Internship inquiries, academic partnerships, or feedback on the project.</p>
+          <a href="mailto:collab@graamcredit.in" class="contact-card-email">collab@graamcredit.in</a>
+          <p class="contact-card-response" data-en="Within 48 hours" data-hi="48 घंटे के भीतर">Within 48 hours</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon" style="background:#F1F5F9; color:#0F172A;">
+            <i class="ri-github-line"></i>
+          </div>
+          <p class="contact-card-title" data-en="Open Source" data-hi="ओपन सोर्स">Open Source</p>
+          <p class="contact-card-body" data-en="View the source code, report bugs, or contribute to the project." data-hi="सोर्स कोड देखें, बग की रिपोर्ट करें, या प्रोजेक्ट में योगदान करें।">View the source code, report bugs, or contribute to the project.</p>
+          <a href="https://github.com" target="_blank" rel="noopener" class="contact-card-link"><span data-en="View on GitHub" data-hi="गिटहब पर देखें">View on GitHub</span> <i class="ri-arrow-right-line"></i></a>
+        </div>
+
+      </div><!-- /contact-info-col -->
+
+      <!-- Right: Contact form -->
+      <div class="contact-form-card">
+        <div id="contactFormWrapper">
+          <h2 class="contact-form-heading" data-en="Send us a message" data-hi="हमें संदेश भेजें">Send us a message</h2>
+          <p class="contact-form-subheading" data-en="We'll get back to you within 24 hours" data-hi="हम 24 घंटे के भीतर आपसे संपर्क करेंगे">We'll get back to you within 24 hours</p>
+
+          <form id="contactForm" novalidate>
+
+            <div class="form-field" id="field-name">
+              <label for="contactName" data-en="Full Name" data-hi="पूरा नाम">Full Name</label>
+              <input type="text" id="contactName" placeholder="Your full name" data-en="Your full name" data-hi="आपका पूरा नाम" autocomplete="name" />
+              <span class="field-error" data-en="Please enter your full name" data-hi="कृपया अपना पूरा नाम दर्ज करें">Please enter your full name</span>
+            </div>
+
+            <div class="form-field" id="field-email">
+              <label for="contactEmail" data-en="Email Address" data-hi="ईमेल पता">Email Address</label>
+              <input type="email" id="contactEmail" placeholder="you@example.com" data-en="you@example.com" data-hi="you@example.com" autocomplete="email" />
+              <span class="field-error" data-en="Please enter a valid email address" data-hi="कृपया एक वैध ईमेल पता दर्ज करें">Please enter a valid email address</span>
+            </div>
+
+            <div class="form-field" id="field-subject">
+              <label for="contactSubject" data-en="Subject" data-hi="विषय">Subject</label>
+              <select id="contactSubject">
+                <option value="" data-en="Select a topic..." data-hi="एक विषय चुनें...">Select a topic...</option>
+                <option value="eligibility" data-en="Eligibility question" data-hi="पात्रता संबंधी प्रश्न">Eligibility question</option>
+                <option value="privacy" data-en="Data / privacy request" data-hi="डेटा / गोपनीयता अनुरोध">Data / privacy request</option>
+                <option value="score" data-en="Score explanation" data-hi="स्कोर स्पष्टीकरण">Score explanation</option>
+                <option value="bug" data-en="Bug report" data-hi="बग रिपोर्ट">Bug report</option>
+                <option value="collab" data-en="Project collaboration" data-hi="परियोजना सहयोग">Project collaboration</option>
+                <option value="other" data-en="Other" data-hi="अन्य">Other</option>
+              </select>
+              <span class="field-error" data-en="Please select a topic" data-hi="कृपया एक विषय चुनें">Please select a topic</span>
+            </div>
+
+            <div class="form-field" id="field-message">
+              <label for="contactMessage" data-en="Message" data-hi="संदेश">Message</label>
+              <textarea id="contactMessage" rows="5" placeholder="Describe your question or issue in detail..." data-en="Describe your question or issue in detail..." data-hi="अपने प्रश्न या मुद्दे का विस्तार से वर्णन करें..."></textarea>
+              <span class="field-error" data-en="Message must be at least 20 characters" data-hi="संदेश कम से कम 20 वर्णों का होना चाहिए">Message must be at least 20 characters</span>
+            </div>
+
+            <div class="form-checkbox-row" id="field-consent">
+              <input type="checkbox" id="contactConsent" />
+              <label for="contactConsent" data-en="I agree that this message will be stored temporarily to allow a reply." data-hi="मैं सहमत हूँ कि उत्तर की अनुमति देने के लिए इस संदेश को अस्थायी रूप से संग्रहीत किया जाएगा।">I agree that this message will be stored temporarily to allow a reply.</label>
+              <span class="field-error" data-en="Please agree to continue" data-hi="जारी रखने के लिए कृपया सहमत हों">Please agree to continue</span>
+            </div>
+
+            <button type="submit" class="contact-submit-btn" id="contactSubmitBtn" disabled data-en="Send Message →" data-hi="संदेश भेजें →">
+              Send Message →
+            </button>
+
+          </form>
+        </div>
+
+        <!-- Success State (hidden by default) -->
+        <div class="contact-success" id="contactSuccess">
+          <i class="ri-checkbox-circle-line"></i>
+          <h3 data-en="Message received!" data-hi="संदेश प्राप्त हुआ!">Message received!</h3>
+          <p><span data-en="Thanks for reaching out. We'll reply to " data-hi="पहुंचने के लिए धन्यवाद। हम 24 घंटे के भीतर उत्तर देंगे ">Thanks for reaching out. We'll reply to </span><strong id="successEmail"></strong><span data-en=" within 24 hours." data-hi=" को।"> within 24 hours.</span></p>
+          <a href="index.html" data-en="Back to home" data-hi="होम पर वापस जाएं">Back to home</a>
+        </div>
+      </div><!-- /contact-form-card -->
+
+    </div><!-- /contact-layout -->
+  </div>
+
+
+  <!-- Bottom info strip -->
+  <section class="contact-info-strip">
+    <div class="container">
+      <div class="contact-info-strip-grid">
+        <div class="contact-info-strip-item">
+          <i class="ri-map-pin-line"></i>
+          <p class="contact-info-strip-label" data-en="Based in" data-hi="आधारित">Based in</p>
+          <p class="contact-info-strip-value" data-en="Uttar Pradesh, India" data-hi="उत्तर प्रदेश, भारत">Uttar Pradesh, India</p>
+        </div>
+        <div class="contact-info-strip-item">
+          <i class="ri-time-line"></i>
+          <p class="contact-info-strip-label" data-en="Response time" data-hi="प्रतिक्रिया समय">Response time</p>
+          <p class="contact-info-strip-value" data-en="Within 24 hours" data-hi="24 घंटे के भीतर">Within 24 hours</p>
+        </div>
+        <div class="contact-info-strip-item">
+          <i class="ri-graduation-cap-line"></i>
+          <p class="contact-info-strip-label" data-en="Project type" data-hi="परियोजना का प्रकार">Project type</p>
+          <p class="contact-info-strip-value" data-en="Student social project · KIET University" data-hi="छात्र सामाजिक परियोजना · KIET विश्वविद्यालय">Student social project · KIET University</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <a href="index.html" class="footer-logo">
+            <span class="logo-icon">G</span><span>GraamCredit</span>
+          </a>
+          <p class="footer-tagline" data-en="AI-powered microloan eligibility for rural India" data-hi="ग्रामीण भारत के लिए AI-संचालित माइक्रोलोन पात्रता">AI-powered microloan eligibility for rural India</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="ri-linkedin-line"></i></a>
+            <a href="#" aria-label="GitHub"><i class="ri-github-line"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Product" data-hi="उत्पाद">Product</p>
+          <ul class="footer-nav-list">
+            <li><a href="how-it-works.html" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a></li>
+            <li><a href="form.html" data-en="Check eligibility" data-hi="पात्रता की जांच करें">Check eligibility</a></li>
+            <li><a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Company" data-hi="कंपनी">Company</p>
+          <ul class="footer-nav-list">
+            <li><a href="privacy-policy.html" data-en="Privacy Policy" data-hi="गोपनीयता नीति">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html" data-en="Terms of Service" data-hi="सेवा की शर्तें">Terms of Service</a></li>
+            <li><a href="contact-us.html" data-en="Contact Us" data-hi="संपर्क करें">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Compliance" data-hi="अनुपालन">Compliance</p>
+          <ul class="footer-compliance-list">
+            <li data-en="RBI Master Directions 2022" data-hi="RBI मास्टर निर्देश 2022">RBI Master Directions 2022</li>
+            <li data-en="India DPDP Act 2023" data-hi="भारत DPDP अधिनियम 2023">India DPDP Act 2023</li>
+            <li data-en="Collateral-free per RBI guidelines" data-hi="RBI दिशानिर्देशों के अनुसार संपार्श्विक-मुक्त">Collateral-free per RBI guidelines</li>
+            <li data-en="Data encrypted at rest + transit" data-hi="डेटा आराम + पारगमन में एन्क्रिप्टेड">Data encrypted at rest + transit</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-en="© 2025 GraamCredit. Built as a student social project." data-hi="© 2025 ग्रामक्रेडिट। एक छात्र सामाजिक परियोजना के रूप में निर्मित।">© 2025 GraamCredit. Built as a student social project.</p>
+        <p data-en="Not a registered NBFC. For educational purposes only." data-hi="पंजीकृत NBFC नहीं। केवल शैक्षिक उद्देश्यों के लिए।">Not a registered NBFC. For educational purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="lang-config.js"></script>
+  <script>
+    // Enable submit when consent checked
+    const consentBox = document.getElementById('contactConsent');
+    const submitBtn = document.getElementById('contactSubmitBtn');
+    consentBox.addEventListener('change', function() {
+      submitBtn.disabled = !this.checked;
+    });
+
+    // Form validation
+    function setError(fieldId, show) {
+      const field = document.getElementById(fieldId);
+      field.classList.toggle('has-error', show);
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const subject = document.getElementById('contactSubject').value;
+      const message = document.getElementById('contactMessage').value.trim();
+      const consent = document.getElementById('contactConsent').checked;
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      let valid = true;
+
+      if (name.length < 2) { setError('field-name', true); valid = false; } else setError('field-name', false);
+      if (!emailRegex.test(email)) { setError('field-email', true); valid = false; } else setError('field-email', false);
+      if (!subject) { setError('field-subject', true); valid = false; } else setError('field-subject', false);
+      if (message.length < 20) { setError('field-message', true); valid = false; } else setError('field-message', false);
+      if (!consent) {
+        document.getElementById('field-consent').classList.add('has-error');
+        valid = false;
+      } else {
+        document.getElementById('field-consent').classList.remove('has-error');
+      }
+
+      if (valid) {
+        const btn = document.getElementById('contactSubmitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+
+        fetch((window.GRAAMCREDIT_API || 'http://127.0.0.1:8000') + '/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subject, message }),
+        })
+          .then(res => {
+            if (!res.ok) return res.json().then(e => Promise.reject(e));
+            return res.json();
+          })
+          .then(() => {
+            document.getElementById('successEmail').textContent = email;
+            document.getElementById('contactFormWrapper').style.display = 'none';
+            document.getElementById('contactSuccess').style.display = 'block';
+          })
+          .catch(err => {
+            btn.disabled = false;
+            btn.textContent = 'Send Message →';
+            alert('Could not send message. Please try again.\n' + (err.detail || ''));
+          });
+      }
+    });
+  </script>
+</body>
+</html>
+

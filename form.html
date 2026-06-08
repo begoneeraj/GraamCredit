@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply — GraamCredit Microloan Eligibility</title>
+  <meta name="description" content="Complete the 5-step application form to check your microloan eligibility with GraamCredit's AI-powered scoring." />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-icon">G</span>
+        <span>GraamCredit</span>
+      </a>
+      <div class="navbar-right">
+        <button class="lang-toggle-pill" id="langToggle" onclick="toggleLanguage()">
+          <i class="ri-global-line globe-icon"></i>
+          <span id="langLabel" data-custom-toggle="target">हिन्दी</span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <div class="form-page-wrapper">
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="container">
+        <div class="progress-header">
+          <span class="progress-step-label" id="progressStepLabel">Consent</span>
+          <span class="progress-step-count" id="progressStepCount">Step 1 of 5</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="step-indicators">
+          <div class="step-dot active" id="stepDot1">
+            <span class="step-dot-circle"><i class="ri-shield-keyhole-line"></i></span>
+            <span class="step-dot-label" data-en="Consent" data-hi="सहमति">Consent</span>
+          </div>
+          <div class="step-dot" id="stepDot2">
+            <span class="step-dot-circle"><i class="ri-user-3-line"></i></span>
+            <span class="step-dot-label" data-en="Personal" data-hi="व्यक्तिगत">Personal</span>
+          </div>
+          <div class="step-dot" id="stepDot3">
+            <span class="step-dot-circle"><i class="ri-bank-card-line"></i></span>
+            <span class="step-dot-label" data-en="Financial" data-hi="वित्तीय">Financial</span>
+          </div>
+          <div class="step-dot" id="stepDot4">
+            <span class="step-dot-circle"><i class="ri-smartphone-line"></i></span>
+            <span class="step-dot-label" data-en="Digital" data-hi="डिजिटल">Digital</span>
+          </div>
+          <div class="step-dot" id="stepDot5">
+            <span class="step-dot-circle"><i class="ri-file-list-3-line"></i></span>
+            <span class="step-dot-label" data-en="Review" data-hi="समीक्षा">Review</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <div class="container">
+        <div class="form-card">
+
+          <!-- ====== STEP 1: CONSENT ====== -->
+          <div class="form-step active" id="step1">
+            <div class="consent-header">
+              <div class="consent-title-container">
+                <i class="ri-shield-keyhole-fill consent-header-icon"></i>
+                <h2 data-i18n="step1Title">Data Consent & Privacy</h2>
+              </div>
+              <p class="step-description" data-i18n="step1Desc">We collect your financial data with your permission to assess loan eligibility. Your data is protected under Indian data protection laws.</p>
+            </div>
+
+            <div class="consent-box">
+              <p class="consent-prompt" data-en="Before we begin, we need your consent to proceed with the following:" data-hi="शुरू करने से पहले, हमें निम्नलिखित के लिए आगे बढ़ने के लिए आपकी सहमति चाहिए:">Before we begin, we need your consent to proceed with the following:</p>
+
+              <label class="consent-checkbox" id="consent1-box">
+                <input type="checkbox" id="consent1" />
+                <span class="custom-circle-checkbox">
+                  <i class="ri-check-line"></i>
+                </span>
+                <span class="consent-text" data-i18n="consent1">I allow GraamCredit to access my bank/UPI transaction data for scoring purposes</span>
+              </label>
+
+              <label class="consent-checkbox" id="consent2-box">
+                <input type="checkbox" id="consent2" />
+                <span class="custom-circle-checkbox">
+                  <i class="ri-check-line"></i>
+                </span>
+                <span class="consent-text" data-i18n="consent2">I allow verification of my government-issued ID for KYC compliance</span>
+              </label>
+
+              <label class="consent-checkbox" id="consent3-box">
+                <input type="checkbox" id="consent3" />
+                <span class="custom-circle-checkbox">
+                  <i class="ri-check-line"></i>
+                </span>
+                <span class="consent-text" data-i18n="consent3">I agree to the Terms of Service and Privacy Policy of GraamCredit</span>
+              </label>
+            </div>
+
+            <div class="form-nav" style="border-top: none; padding-top: 24px;">
+              <button class="btn btn-proceed" onclick="nextStep()" disabled id="btnProceed">
+                <span data-en="Proceed" data-hi="आगे बढ़ें">Proceed</span>
+                <i class="ri-arrow-right-line"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ====== STEP 2: PERSONAL INFO ====== -->
+          <div class="form-step" id="step2">
+            <h2 data-i18n="step2Title">KYC / Personal Information</h2>
+            <p class="step-description" data-i18n="step2Desc">Tell us about yourself. All fields are required.</p>
+
+            <div class="security-notice" id="secNotice2">
+              <span class="lock-icon">🔒</span>
+              <span data-i18n="securityNotice">Your data is encrypted and stored securely</span>
+            </div>
+
+            <div class="form-group">
+              <label for="fullName"><span data-i18n="labelName">Full Name</span> <span class="required">*</span></label>
+              <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name" />
+              <div class="error-msg">Required</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="age"><span data-i18n="labelAge">Age</span> <span class="required">*</span></label>
+                <input type="number" id="age" min="18" max="120" placeholder="e.g. 28" />
+                <div class="error-msg">Required</div>
+              </div>
+              <div class="form-group">
+                <label for="gender"><span data-i18n="labelGender">Gender</span> <span class="required">*</span></label>
+                <select id="gender">
+                  <option value="">-- Select --</option>
+                  <option value="female">Female / महिला</option>
+                  <option value="male">Male / पुरुष</option>
+                  <option value="other">Other / अन्य</option>
+                </select>
+                <div class="error-msg">Required</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="state"><span data-i18n="labelState">State</span> <span class="required">*</span></label>
+              <select id="state">
+                <option value="">-- Select State --</option>
+                <option value="Uttar Pradesh">Uttar Pradesh / उत्तर प्रदेश</option>
+                <option value="Bihar">Bihar / बिहार</option>
+                <option value="Rajasthan">Rajasthan / राजस्थान</option>
+                <option value="Madhya Pradesh">Madhya Pradesh / मध्य प्रदेश</option>
+                <option value="Maharashtra">Maharashtra / महाराष्ट्र</option>
+                <option value="West Bengal">West Bengal / पश्चिम बंगाल</option>
+                <option value="Jharkhand">Jharkhand / झारखंड</option>
+                <option value="Chhattisgarh">Chhattisgarh / छत्तीसगढ़</option>
+                <option value="Odisha">Odisha / ओडिशा</option>
+                <option value="Assam">Assam / असम</option>
+                <option value="Tamil Nadu">Tamil Nadu / तमिल नाडु</option>
+                <option value="Karnataka">Karnataka / कर्नाटक</option>
+                <option value="Andhra Pradesh">Andhra Pradesh / आंध्र प्रदेश</option>
+                <option value="Telangana">Telangana / तेलंगाना</option>
+                <option value="Gujarat">Gujarat / गुजरात</option>
+                <option value="Punjab">Punjab / पंजाब</option>
+                <option value="Haryana">Haryana / हरियाणा</option>
+                <option value="Kerala">Kerala / केरल</option>
+                <option value="Other">Other / अन्य</option>
+              </select>
+              <div class="error-msg">Required</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="idType"><span data-i18n="labelIdType">ID Type</span> <span class="required">*</span></label>
+                <select id="idType">
+                  <option value="">-- Select --</option>
+                  <option value="aadhaar">Aadhaar Card / आधार</option>
+                  <option value="voter">Voter ID / मतदाता पहचान पत्र</option>
+                  <option value="nrega">NREGA Card / नरेगा कार्ड</option>
+                </select>
+                <div class="error-msg">Required</div>
+              </div>
+              <div class="form-group">
+                <label for="idNumber"><span data-i18n="labelIdNumber">ID Number</span> <span class="required">*</span></label>
+                <input type="text" id="idNumber" placeholder="Enter ID number" />
+                <div class="error-msg">Required</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="applicantEmail"><span data-i18n="labelEmail">Email Address</span> <span class="optional-tag">(Optional — for result notification)</span></label>
+              <input type="email" id="applicantEmail" placeholder="e.g. name@example.com" autocomplete="email" />
+              <div class="error-msg">Please enter a valid email address</div>
+            </div>
+
+            <div class="form-nav">
+              <button class="btn btn-back" onclick="prevStep()" data-i18n="btnBack">← Back</button>
+              <button class="btn btn-primary" onclick="nextStep()" data-i18n="btnNext">Next →</button>
+            </div>
+          </div>
+
+          <!-- ====== STEP 3: FINANCIAL INFO ====== -->
+          <div class="form-step" id="step3">
+            <h2 data-i18n="step3Title">Financial Information</h2>
+            <p class="step-description" data-i18n="step3Desc">Help us understand your financial situation.</p>
+
+            <div class="security-notice" id="secNotice3">
+              <span class="lock-icon">🔒</span>
+              <span data-i18n="securityNotice">Your data is encrypted and stored securely</span>
+            </div>
+
+            <!-- PDF Statement Upload -->
+            <div class="pdf-upload-box" id="pdfUploadBox">
+              <div class="pdf-upload-header">
+                <i class="ri-file-pdf-line" style="font-size:1.4rem;color:#1D9E75;"></i>
+                <div>
+                  <div class="pdf-upload-title" data-i18n="pdfUploadTitle">Auto-fill from Bank Statement</div>
+                  <div class="pdf-upload-sub" data-i18n="pdfUploadSub">Upload your PDF statement to fill fields automatically. File is deleted immediately after parsing.</div>
+                </div>
+              </div>
+              <label class="pdf-upload-label" id="pdfDropZone">
+                <input type="file" id="pdfFileInput" accept=".pdf,application/pdf" style="display:none" onchange="handlePDFUpload(this.files[0])" />
+                <i class="ri-upload-cloud-2-line" style="font-size:2rem;color:#9CA3AF;"></i>
+                <span class="pdf-drop-text" data-i18n="pdfDropText">Click to select PDF (max 5 MB)</span>
+                <span class="pdf-drop-sub" data-i18n="pdfDropSub">SBI · HDFC · Axis · Canara · PNB · ICICI</span>
+              </label>
+              <div id="pdfStatus" class="pdf-status" style="display:none"></div>
+            </div>
+
+            <!-- Account Aggregator (Phase 3) -->
+            <div class="pdf-upload-box" id="aaBox" style="margin-top:10px;border-color:#6366F1;background:#F5F3FF;">
+              <div class="pdf-upload-header">
+                <i class="ri-bank-line" style="font-size:1.4rem;color:#6366F1;"></i>
+                <div>
+                  <div class="pdf-upload-title" style="color:#4338CA;" data-i18n="aaTitle">Share Bank Data via Account Aggregator</div>
+                  <div class="pdf-upload-sub" data-i18n="aaSub">RBI-regulated consent flow. Your bank shares data directly — no password required. Powered by Setu AA.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <input type="text" id="aaVua" placeholder="Mobile number or VUA (e.g. 9999999999@onemoney)"
+                  style="flex:1;min-width:200px;padding:9px 12px;border:1px solid #C7D2FE;border-radius:8px;font-size:0.85rem;" />
+                <button type="button" onclick="initiateAA()" id="aaBtn"
+                  style="background:#6366F1;color:#fff;border:none;padding:9px 16px;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer;white-space:nowrap;">
+                  <i class="ri-shield-check-line"></i> <span data-i18n="aaBtnLabel">Connect Bank</span>
+                </button>
+              </div>
+              <div id="aaStatus" class="pdf-status" style="display:none;margin-top:10px;"></div>
+            </div>
+
+            <div class="pdf-divider">
+              <span data-i18n="pdfOrManual">— or fill manually below —</span>
+            </div>
+
+            <div class="form-group">
+              <label for="annualIncome"><span data-i18n="labelIncome">Annual Household Income</span> <span class="required">*</span></label>
+              <div class="input-prefix">
+                <input type="number" id="annualIncome" min="0" placeholder="e.g. 150000" />
+              </div>
+              <div class="error-msg">Required</div>
+            </div>
+
+            <div class="form-group">
+              <label for="monthlyExpenses"><span data-i18n="labelExpenses">Monthly Expenses</span> <span class="required">*</span></label>
+              <div class="input-prefix">
+                <input type="number" id="monthlyExpenses" min="0" placeholder="e.g. 8000" />
+              </div>
+              <div class="error-msg">Required</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="existingLoans"><span data-i18n="labelLoans">Existing Loans Count</span></label>
+                <input type="number" id="existingLoans" min="0" value="0" />
+                <div class="error-msg">Invalid</div>
+              </div>
+              <div class="form-group">
+                <label for="monthlyEMI"><span data-i18n="labelEMI">Total Monthly EMI</span></label>
+                <div class="input-prefix">
+                  <input type="number" id="monthlyEMI" min="0" value="0" />
+                </div>
+                <div class="error-msg">Invalid</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="employment"><span data-i18n="labelEmployment">Employment Type</span> <span class="required">*</span></label>
+              <select id="employment">
+                <option value="">-- Select --</option>
+                <option value="salaried">Salaried / वेतनभोगी</option>
+                <option value="farmer">Farmer / किसान</option>
+                <option value="laborer">Daily Laborer / दैनिक मजदूर</option>
+                <option value="business">Small Business / छोटा व्यापार</option>
+                <option value="other">Other / अन्य</option>
+              </select>
+              <div class="error-msg">Required</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="savingsBalance"><span data-i18n="labelSavings">Current Bank Balance</span> <span class="optional-tag">(Optional)</span></label>
+                <div class="input-prefix">
+                  <input type="number" id="savingsBalance" min="0" value="0" placeholder="e.g. 5000" />
+                </div>
+                <div class="error-msg">Invalid</div>
+              </div>
+              <div class="form-group">
+                <label for="numDependents"><span data-i18n="labelDependents">Family Dependents</span> <span class="optional-tag">(Optional)</span></label>
+                <input type="number" id="numDependents" min="0" max="15" value="0" placeholder="e.g. 3" />
+                <div class="error-msg">Invalid</div>
+              </div>
+            </div>
+
+            <div class="form-nav">
+              <button class="btn btn-back" onclick="prevStep()" data-i18n="btnBack">← Back</button>
+              <button class="btn btn-primary" onclick="nextStep()" data-i18n="btnNext">Next →</button>
+            </div>
+          </div>
+
+          <!-- ====== STEP 4: DIGITAL ACTIVITY ====== -->
+          <div class="form-step" id="step4">
+            <h2 data-i18n="step4Title">Digital Activity</h2>
+            <p class="step-description" data-i18n="step4Desc">Optional data that can help improve your score.</p>
+
+            <div class="form-group">
+              <label for="upiTransactions"><span data-i18n="labelUPI">UPI Transactions per Month</span> <span class="optional-tag">(Optional)</span></label>
+              <input type="number" id="upiTransactions" min="0" value="0" placeholder="e.g. 15" />
+            </div>
+
+            <div class="form-group">
+              <label for="mobileRecharges"><span data-i18n="labelRecharges">Mobile Recharges (last 6 months)</span> <span class="optional-tag">(Optional)</span></label>
+              <input type="number" id="mobileRecharges" min="0" value="0" placeholder="e.g. 6" />
+            </div>
+
+            <div class="form-group">
+              <label><span data-i18n="labelSHG">Part of SHG/JLG Group?</span></label>
+              <div class="toggle-group">
+                <span data-en="No" data-hi="नहीं" id="shgLabelNo">No</span>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="shgToggle" />
+                  <span class="toggle-slider"></span>
+                </label>
+                <span data-en="Yes" data-hi="हाँ" id="shgLabelYes">Yes</span>
+              </div>
+            </div>
+
+            <div class="info-note">
+              <span class="info-icon">💡</span>
+              <span data-i18n="infoNote">This data helps us give you a better score. Filling these fields is optional but recommended.</span>
+            </div>
+
+            <div class="form-nav">
+              <button class="btn btn-back" onclick="prevStep()" data-i18n="btnBack">← Back</button>
+              <button class="btn btn-primary" onclick="nextStep()" data-i18n="btnNext">Next →</button>
+            </div>
+          </div>
+
+          <!-- ====== STEP 5: REVIEW & SUBMIT ====== -->
+          <div class="form-step" id="step5">
+            <h2 data-i18n="step5Title">Review Your Application</h2>
+            <p class="step-description" data-i18n="step5Desc">Please review all the information before submitting.</p>
+
+            <div id="reviewContent">
+              <!-- Populated by JS -->
+            </div>
+
+            <div class="form-nav">
+              <button class="btn btn-back" onclick="prevStep()" data-i18n="btnBack">← Back</button>
+              <button class="btn btn-primary btn-lg" onclick="submitApplication()" id="submitBtn">
+                <span data-i18n="btnSubmit">🚀 Submit Application</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p data-en="Analyzing your application..." data-hi="आपके आवेदन का विश्लेषण किया जा रहा है...">Analyzing your application...</p>
+    <p class="loading-sub" data-en="Our AI model is evaluating your eligibility" data-hi="हमारा AI मॉडल आपकी पात्रता का मूल्यांकन कर रहा है">Our AI model is evaluating your eligibility</p>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 GraamCredit. Made with ❤️ for rural India.</p>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="lang-config.js?v=1.0.1"></script>
+  <script src="script.js?v=1.0.1"></script>
+</body>
+</html>
+

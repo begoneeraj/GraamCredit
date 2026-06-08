@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — GraamCredit</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="config.js"></script>
+  <style>
+    :root {
+      --primary: #1D9E75;
+      --primary-light: #E8F8F2;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --success: #22C55E;
+      --text-dark: #111827;
+      --text-light: #6B7280;
+      --bg: #F9FAFB;
+      --card-bg: #FFFFFF;
+      --border: #E5E7EB;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text-dark); }
+
+    .disclaimer-bar {
+      background: #FEF3C7;
+      border-bottom: 1px solid #F59E0B40;
+      padding: 10px 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #92400E;
+    }
+    .disclaimer-bar strong { font-weight: 700; }
+
+    .admin-nav {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-nav .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800;
+    }
+    .admin-badge {
+      background: #FEE2E2;
+      color: #B91C1C;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+    .logout-btn:hover { background: var(--bg); }
+
+    .admin-main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    .page-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+    .page-subtitle { color: var(--text-light); font-size: 0.9rem; margin-bottom: 28px; }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .stat-sub { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
+
+    /* Charts row */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 640px) { .charts-row { grid-template-columns: 1fr; } }
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+    .chart-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    .chart-wrap { position: relative; height: 200px; }
+
+    /* Table section */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .section-title { font-size: 1rem; font-weight: 700; }
+
+    .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-outline { background: none; border: 1px solid var(--border); color: var(--text-dark); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-danger { background: #FEE2E2; color: #B91C1C; }
+    .btn-danger:hover { background: #FECACA; }
+    .btn-sm { padding: 4px 10px; font-size: 0.78rem; }
+
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: var(--bg);
+      padding: 11px 16px;
+      text-align: left;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg); }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-yes { background: #DCFCE7; color: #166534; }
+    .badge-no  { background: #FEE2E2; color: #991B1B; }
+
+    .score-pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .score-high   { background: #DCFCE7; color: #166534; }
+    .score-medium { background: #FEF9C3; color: #92400E; }
+    .score-low    { background: #FEE2E2; color: #991B1B; }
+
+    .state-box {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-light);
+    }
+    .state-box i { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #111827;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.87rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <div class="disclaimer-bar">
+    <strong>⚠ Prototype Admin Panel.</strong>
+    This is a student project demo. Not for production use. No real user data is present.
+  </div>
+
+  <nav class="admin-nav">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">G</div>
+      <span>GraamCredit</span>
+      <span class="admin-badge">Admin</span>
+    </a>
+    <button class="logout-btn" onclick="logout()">
+      <i class="ri-logout-box-line"></i> Logout
+    </button>
+  </nav>
+
+  <main class="admin-main" id="adminMain" style="display:none">
+    <div class="page-title">Dashboard</div>
+    <div class="page-subtitle">Aggregate statistics — no personally identifiable data shown.</div>
+
+    <!-- Stats cards -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-label">Total Applications</div>
+        <div class="stat-value" id="statTotal">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Approval Rate</div>
+        <div class="stat-value" id="statApproval">—</div>
+        <div class="stat-sub">of all applicants pre-qualified</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Average Score</div>
+        <div class="stat-value" id="statAvgScore">—</div>
+        <div class="stat-sub">out of 100</div>
+      </div>
+      <div class="stat-card" style="border-left: 4px solid var(--danger);">
+        <div class="stat-label">Top Rejection Reason</div>
+        <div style="font-size:0.95rem; font-weight:700; margin-top:8px;" id="statTopReason">—</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Approval vs Rejection</div>
+        <div class="chart-wrap"><canvas id="chartApproval"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Score Distribution</div>
+        <div class="chart-wrap"><canvas id="chartScores"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Recent applications table -->
+    <div class="section-header">
+      <div class="section-title">Recent Applications (last 20)</div>
+      <div class="toolbar">
+        <button class="btn btn-outline" onclick="loadAll()">
+          <i class="ri-refresh-line"></i> Refresh
+        </button>
+        <button class="btn btn-outline" onclick="exportCSV()" id="csvBtn" disabled>
+          <i class="ri-download-2-line"></i> Export CSV
+        </button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div id="tableContainer">
+        <div class="state-box">
+          <i class="ri-loader-4-line"></i>
+          Loading…
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Auth gate -->
+  <div id="authGate" style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+    <div style="text-align:center;background:#fff;padding:40px;border-radius:16px;border:1px solid #E5E7EB;max-width:380px;width:90%;">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>
+      <h2 style="margin-bottom:8px;">Admin Access</h2>
+      <p style="color:#6B7280;font-size:0.9rem;margin-bottom:24px;">Enter the admin password to continue.</p>
+      <input type="password" id="pwInput" placeholder="Password"
+        style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:1rem;margin-bottom:12px;"
+        onkeydown="if(event.key==='Enter') checkAuth()" />
+      <button onclick="checkAuth()"
+        style="width:100%;background:#1D9E75;color:#fff;border:none;padding:11px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;">
+        Login
+      </button>
+      <p id="authError" style="color:#EF4444;font-size:0.85rem;margin-top:10px;display:none;">Incorrect password.</p>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    const API_BASE = (window.GRAAMCREDIT_API || 'http://127.0.0.1:8000') + '/api';
+    const ADMIN_PASSWORD = 'graamcredit2025';
+
+    let approvalChart = null;
+    let scoreChart = null;
+    let tableRows = [];
+
+    // ── Auth ──────────────────────────────────────────────────────────────────
+
+    function checkAuth() {
+      const pw = document.getElementById('pwInput').value;
+      if (pw === ADMIN_PASSWORD) {
+        sessionStorage.setItem('graamcredit_admin', '1');
+        document.getElementById('authGate').style.display = 'none';
+        document.getElementById('adminMain').style.display = 'block';
+        loadAll();
+      } else {
+        document.getElementById('authError').style.display = 'block';
+        document.getElementById('pwInput').value = '';
+        document.getElementById('pwInput').focus();
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('graamcredit_admin');
+      document.getElementById('adminMain').style.display = 'none';
+      document.getElementById('authGate').style.display = 'flex';
+    }
+
+    if (sessionStorage.getItem('graamcredit_admin') === '1') {
+      document.getElementById('authGate').style.display = 'none';
+      document.getElementById('adminMain').style.display = 'block';
+    }
+
+    // ── Load ──────────────────────────────────────────────────────────────────
+
+    async function loadAll() {
+      await Promise.all([loadStats(), loadApplications()]);
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API_BASE}/stats`);
+        if (!res.ok) throw new Error('Server error');
+        const d = await res.json();
+
+        document.getElementById('statTotal').textContent = d.total_applications;
+        document.getElementById('statApproval').textContent =
+          d.total_applications > 0 ? (d.approval_rate * 100).toFixed(1) + '%' : '—';
+        document.getElementById('statAvgScore').textContent =
+          d.total_applications > 0 ? d.average_score : '—';
+        document.getElementById('statTopReason').textContent = d.top_rejection_reason || '—';
+
+        renderApprovalChart(d);
+        renderScoreChart(d.score_distribution);
+      } catch (e) {
+        document.getElementById('statTotal').textContent = 'Error';
+      }
+    }
+
+    async function loadApplications() {
+      const container = document.getElementById('tableContainer');
+      try {
+        const res = await fetch(`${API_BASE}/stats/applications?limit=20`);
+        if (!res.ok) throw new Error('Server error');
+        tableRows = await res.json();
+
+        if (!tableRows.length) {
+          container.innerHTML = `
+            <div class="state-box">
+              <i class="ri-inbox-line"></i>
+              No applications yet.
+            </div>`;
+          document.getElementById('csvBtn').disabled = true;
+          return;
+        }
+
+        renderTable(tableRows);
+        document.getElementById('csvBtn').disabled = false;
+      } catch (e) {
+        container.innerHTML = `
+          <div class="state-box">
+            <i class="ri-error-warning-line"></i>
+            Could not load applications. Is the backend running?
+          </div>`;
+        document.getElementById('csvBtn').disabled = true;
+      }
+    }
+
+    // ── Table ─────────────────────────────────────────────────────────────────
+
+    function renderTable(rows) {
+      const container = document.getElementById('tableContainer');
+      const tbody = rows.map(r => {
+        const scoreClass = r.score >= 60 ? 'score-high' : r.score >= 40 ? 'score-medium' : 'score-low';
+        const eligBadge = r.eligible
+          ? '<span class="badge badge-yes">Yes</span>'
+          : '<span class="badge badge-no">No</span>';
+        const date = r.created_at
+          ? new Date(r.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+          : '—';
+        return `<tr id="row-${r.application_id}">
+          <td style="font-family:monospace;font-size:0.82rem">${r.application_id}</td>
+          <td><span class="score-pill ${scoreClass}">${r.score}</span></td>
+          <td>${eligBadge}</td>
+          <td>${r.state || '—'}</td>
+          <td style="color:var(--text-light)">${date}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="deleteApplication('${r.application_id}')">
+              <i class="ri-delete-bin-line"></i> Delete
+            </button>
+          </td>
+        </tr>`;
+      }).join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Application ID</th>
+              <th>Score</th>
+              <th>Eligible</th>
+              <th>State</th>
+              <th>Submitted</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>${tbody}</tbody>
+        </table>`;
+    }
+
+    // ── Delete ────────────────────────────────────────────────────────────────
+
+    async function deleteApplication(appId) {
+      if (!confirm(`Delete application ${appId}?\n\nThis will anonymise all personal data (DPDP Act erasure). The row will be removed from this view.`)) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/application/${appId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Server error');
+
+        // Remove from local data and re-render without a full reload
+        tableRows = tableRows.filter(r => r.application_id !== appId);
+        if (tableRows.length) {
+          renderTable(tableRows);
+        } else {
+          document.getElementById('tableContainer').innerHTML = `
+            <div class="state-box">
+              <i class="ri-inbox-line"></i>
+              No applications yet.
+            </div>`;
+          document.getElementById('csvBtn').disabled = true;
+        }
+
+        // Refresh stats (approval rate / total changes after delete)
+        await loadStats();
+        showToast(`${appId} deleted and anonymised.`);
+      } catch (e) {
+        showToast('Delete failed — is the backend running?');
+      }
+    }
+
+    // ── Charts ────────────────────────────────────────────────────────────────
+
+    function renderApprovalChart(d) {
+      const total = d.total_applications;
+      const approved = Math.round(d.approval_rate * total);
+      const rejected = total - approved;
+
+      const ctx = document.getElementById('chartApproval').getContext('2d');
+      if (approvalChart) approvalChart.destroy();
+
+      approvalChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Approved', 'Rejected'],
+          datasets: [{
+            data: total > 0 ? [approved, rejected] : [1, 0],
+            backgroundColor: ['#22C55E', '#EF4444'],
+            borderWidth: 0,
+            hoverOffset: 6,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  if (total === 0) return 'No data';
+                  const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                  return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    function renderScoreChart(dist) {
+      const ctx = document.getElementById('chartScores').getContext('2d');
+      if (scoreChart) scoreChart.destroy();
+
+      scoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['0–39\n(Very Low)', '40–59\n(Low)', '60–79\n(Medium)', '80–100\n(High)'],
+          datasets: [{
+            label: 'Applicants',
+            data: dist ? [dist.very_low, dist.low, dist.medium, dist.high] : [0, 0, 0, 0],
+            backgroundColor: ['#EF4444', '#F59E0B', '#3B82F6', '#22C55E'],
+            borderRadius: 6,
+            borderSkipped: false,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} applicants` } },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { precision: 0 },
+              grid: { color: '#F3F4F6' },
+            },
+            x: { grid: { display: false } },
+          },
+        },
+      });
+    }
+
+    // ── CSV Export ────────────────────────────────────────────────────────────
+
+    function exportCSV() {
+      if (!tableRows.length) return;
+      const headers = ['Application ID', 'Score', 'Eligible', 'State', 'Submitted'];
+      const csvLines = [
+        headers.join(','),
+        ...tableRows.map(r => {
+          const date = r.created_at
+            ? new Date(r.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+            : '';
+          return [r.application_id, r.score, r.eligible ? 'Yes' : 'No', r.state || '', date].join(',');
+        }),
+      ];
+      const blob = new Blob([csvLines.join('\n')], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `graamcredit_applications_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+
+    if (sessionStorage.getItem('graamcredit_admin') === '1') {
+      loadAll();
+    }
+  </script>
+
+</body>
+</html>

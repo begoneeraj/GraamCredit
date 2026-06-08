@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — GraamCredit</title>
+  <meta name="description" content="GraamCredit Privacy Policy — compliant with India's DPDP Act 2023 and RBI guidelines." />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-icon">G</span>
+        <span>GraamCredit</span>
+      </a>
+      <div class="navbar-links">
+        <a href="index.html#how-it-works" id="nav-hiw" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+        <a href="faq.html" id="nav-faq" data-en="FAQ" data-hi="FAQ">FAQ</a>
+        <a href="contact-us.html" data-en="Contact" data-hi="संपर्क">Contact</a>
+      </div>
+      <div class="navbar-right">
+        <button class="lang-toggle-pill" id="langToggle" onclick="toggleLanguage()">
+          <span id="langLabel">EN | हिंदी</span>
+        </button>
+        <a href="form.html" class="btn btn-primary btn-sm rounded-pill" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+        <button class="navbar-hamburger" id="hamburgerBtn" aria-label="Open menu">
+          <i class="ri-menu-3-line"></i>
+        </button>
+      </div>
+    </div>
+    <div class="navbar-mobile-menu" id="mobileMenu">
+      <a href="index.html#how-it-works" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+      <a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a>
+      <a href="contact-us.html" data-en="Contact" data-hi="संपर्क">Contact</a>
+      <a href="form.html" data-en="Apply Now" data-hi="अभी आवेदन करें">Apply Now</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="inner-hero">
+    <div class="container inner-hero-content">
+      <span class="inner-hero-pill" data-en="LEGAL" data-hi="कानूनी">LEGAL</span>
+      <h1 data-en="Privacy Policy" data-hi="गोपनीयता नीति">Privacy Policy</h1>
+      <p data-en="Last updated: January 2025 · Compliant with India's DPDP Act 2023 and RBI guidelines" data-hi="अंतिम अपडेट: जनवरी 2025 · भारत के DPDP अधिनियम 2023 और RBI दिशानिर्देशों के अनुरूप">Last updated: January 2025 · Compliant with India's DPDP Act 2023 and RBI guidelines</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Mobile dropdown -->
+    <div class="legal-toc-mobile">
+      <select id="tocSelect" onchange="document.querySelector(this.value).scrollIntoView({behavior:'smooth'})">
+        <option value="" data-en="Jump to section…" data-hi="अनुभाग पर जाएं…">Jump to section…</option>
+        <option value="#pp-s1" data-en="1. Information We Collect" data-hi="1. जानकारी जो हम एकत्र करते हैं">1. Information We Collect</option>
+        <option value="#pp-s2" data-en="2. How We Use Your Data" data-hi="2. हम आपके डेटा का उपयोग कैसे करते हैं">2. How We Use Your Data</option>
+        <option value="#pp-s3" data-en="3. Data Storage and Security" data-hi="3. डेटा भंडारण और सुरक्षा">3. Data Storage and Security</option>
+        <option value="#pp-s4" data-en="4. Your Rights Under DPDP Act 2023" data-hi="4. DPDP अधिनियम 2023 के तहत आपके अधिकार">4. Your Rights Under DPDP Act 2023</option>
+        <option value="#pp-s5" data-en="5. Cookies" data-hi="5. कुकीज़">5. Cookies</option>
+        <option value="#pp-s6" data-en="6. Third Parties" data-hi="6. तीसरे पक्ष">6. Third Parties</option>
+        <option value="#pp-s7" data-en="7. Changes to This Policy" data-hi="7. इस नीति में बदलाव">7. Changes to This Policy</option>
+        <option value="#pp-s8" data-en="8. Contact" data-hi="8. संपर्क">8. Contact</option>
+      </select>
+    </div>
+
+    <div class="legal-layout">
+      <!-- Sidebar TOC -->
+      <nav class="legal-toc" aria-label="Table of contents">
+        <p class="legal-toc-title" data-en="On this page" data-hi="इस पृष्ठ पर">On this page</p>
+        <ul class="legal-toc-list" id="tocList">
+          <li><a href="#pp-s1" data-en="1. Information We Collect" data-hi="1. जानकारी जो हम एकत्र करते हैं">1. Information We Collect</a></li>
+          <li><a href="#pp-s2" data-en="2. How We Use Your Data" data-hi="2. हम आपके डेटा का उपयोग कैसे करते हैं">2. How We Use Your Data</a></li>
+          <li><a href="#pp-s3" data-en="3. Data Storage and Security" data-hi="3. डेटा भंडारण और सुरक्षा">3. Data Storage and Security</a></li>
+          <li><a href="#pp-s4" data-en="4. Your Rights Under DPDP Act 2023" data-hi="4. DPDP अधिनियम 2023 के तहत आपके अधिकार">4. Your Rights Under DPDP Act 2023</a></li>
+          <li><a href="#pp-s5" data-en="5. Cookies" data-hi="5. कुकीज़">5. Cookies</a></li>
+          <li><a href="#pp-s6" data-en="6. Third Parties" data-hi="6. तीसरे पक्ष">6. Third Parties</a></li>
+          <li><a href="#pp-s7" data-en="7. Changes to This Policy" data-hi="7. इस नीति में बदलाव">7. Changes to This Policy</a></li>
+          <li><a href="#pp-s8" data-en="8. Contact" data-hi="8. संपर्क">8. Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Content -->
+      <div class="legal-content">
+
+        <section class="legal-section" id="pp-s1">
+          <h2 class="legal-section-heading" data-en="1. Information We Collect" data-hi="1. जानकारी जो हम एकत्र करते हैं">1. Information We Collect</h2>
+          <p data-en="We collect the following categories of data only with your explicit consent:" data-hi="हम केवल आपकी स्पष्ट सहमति से डेटा की निम्नलिखित श्रेणियों को एकत्र करते हैं:">We collect the following categories of data only with your explicit consent:</p>
+          <ul>
+            <li data-en="Personal identifiers: name, age, gender, address, government ID number" data-hi="व्यक्तिगत पहचानकर्ता: नाम, आयु, लिंग, पता, सरकारी आईडी नंबर"><strong>Personal identifiers:</strong> name, age, gender, address, government ID number</li>
+            <li data-en="Financial information: self-declared household income, monthly expenses, existing loan details, bank or UPI transaction history (if uploaded)" data-hi="वित्तीय जानकारी: स्व-घोषित घरेलू आय, मासिक खर्च, मौजूदा ऋण विवरण, बैंक या यूपीआई लेनदेन इतिहास (यदि अपलोड किया गया है)"><strong>Financial information:</strong> self-declared household income, monthly expenses, existing loan details, bank or UPI transaction history (if uploaded)</li>
+            <li data-en="Digital activity: UPI transaction count, mobile recharge frequency (entered manually — we do not access your device directly)" data-hi="डिजिटल गतिविधि: यूपीआई लेनदेन की संख्या, मोबाइल रिचार्ज आवृत्ति (मैन्युअल रूप से दर्ज की गई — हम आपके डिवाइस को सीधे एक्सेस नहीं करते हैं)"><strong>Digital activity:</strong> UPI transaction count, mobile recharge frequency (entered manually — we do not access your device directly)</li>
+            <li data-en="Device metadata: browser type, screen size (for app functionality only)" data-hi="डिवाइस मेटाडेटा: ब्राउज़र प्रकार, स्क्रीन आकार (केवल ऐप कार्यक्षमता के लिए)"><strong>Device metadata:</strong> browser type, screen size (for app functionality only)</li>
+          </ul>
+          <div class="legal-highlight" data-en="We never collect your Aadhaar biometrics, bank passwords, OTPs, or any data without a specific consent checkbox." data-hi="हम कभी भी आपकी आधार बायोमेट्रिक्स, बैंक पासवर्ड, ओटीपी, या बिना किसी विशिष्ट सहमति चेकबॉक्स के कोई भी डेटा एकत्र नहीं करते हैं।">
+            We never collect your Aadhaar biometrics, bank passwords, OTPs, or any data without a specific consent checkbox.
+          </div>
+        </section>
+
+        <section class="legal-section" id="pp-s2">
+          <h2 class="legal-section-heading" data-en="2. How We Use Your Data" data-hi="2. हम आपके डेटा का उपयोग कैसे करते हैं">2. How We Use Your Data</h2>
+          <p data-en="Your data is used exclusively for:" data-hi="आपके डेटा का उपयोग विशेष रूप से इसके लिए किया जाता है:">Your data is used exclusively for:</p>
+          <ul>
+            <li data-en="Verifying basic eligibility (age, income, KYC)" data-hi="बुनियादी पात्रता (आयु, आय, केवाईसी) की पुष्टि करना">Verifying basic eligibility (age, income, KYC)</li>
+            <li data-en="Running our AI credit scoring model to predict repayment ability" data-hi="पुनर्भुगतान क्षमता की भविष्यवाणी करने के लिए हमारे एआई क्रेडिट स्कोरिंग मॉडल को चलाना">Running our AI credit scoring model to predict repayment ability</li>
+            <li data-en="Displaying your result and score breakdown" data-hi="आपका परिणाम और स्कोर ब्रेकडाउन प्रदर्शित करना">Displaying your result and score breakdown</li>
+            <li data-en="Improving model accuracy using anonymised, aggregated patterns" data-hi="अनाम, एकत्रित पैटर्न का उपयोग करके मॉडल सटीकता में सुधार करना">Improving model accuracy using anonymised, aggregated patterns</li>
+          </ul>
+          <p data-en="We do NOT use your data for:" data-hi="हम आपके डेटा का उपयोग इसके लिए नहीं करते हैं:">We do <strong>NOT</strong> use your data for:</p>
+          <ul>
+            <li data-en="Marketing or advertising" data-hi="विपणन या विज्ञापन">Marketing or advertising</li>
+            <li data-en="Selling to third parties" data-hi="तीसरे पक्षों को बेचना">Selling to third parties</li>
+            <li data-en="Any purpose beyond loan eligibility assessment" data-hi="ऋण पात्रता मूल्यांकन से परे कोई भी उद्देश्य">Any purpose beyond loan eligibility assessment</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" id="pp-s3">
+          <h2 class="legal-section-heading" data-en="3. Data Storage and Security" data-hi="3. डेटा भंडारण और सुरक्षा">3. Data Storage and Security</h2>
+          <ul>
+            <li data-en="All data is transmitted over HTTPS (TLS 1.2+)" data-hi="सभी डेटा HTTPS (TLS 1.2+) पर प्रेषित किया जाता है">All data is transmitted over HTTPS (TLS 1.2+)</li>
+            <li data-en="Stored data is AES-256 encrypted at rest" data-hi="संग्रहीत डेटा आराम पर AES-256 एन्क्रिप्टेड है">Stored data is AES-256 encrypted at rest</li>
+            <li data-en="Raw documents (bank statements, ID uploads) are deleted within 24 hours of processing" data-hi="कच्चे दस्तावेज़ (बैंक स्टेटमेंट, आईडी अपलोड) प्रसंस्करण के 24 घंटे के भीतर हटा दिए जाते हैं">Raw documents (bank statements, ID uploads) are deleted within 24 hours of processing</li>
+            <li data-en="Derived features (expense ratio, score) are retained for 90 days then permanently deleted" data-hi="व्युत्पन्न सुविधाएँ (खर्च अनुपात, स्कोर) 90 दिनों के लिए रखी जाती हैं फिर स्थायी रूप से हटा दी जाती हैं">Derived features (expense ratio, score) are retained for 90 days then permanently deleted</li>
+            <li data-en="We use role-based access — only the scoring system can read your data; no human staff has access to individual records" data-hi="हम भूमिका-आधारित पहुंच का उपयोग करते हैं — केवल स्कोरिंग सिस्टम ही आपका डेटा पढ़ सकता है; किसी भी मानव कर्मचारी के पास व्यक्तिगत रिकॉर्ड तक पहुंच नहीं है">We use role-based access — only the scoring system can read your data; no human staff has access to individual records</li>
+          </ul>
+          <div class="legal-highlight" data-en="This prototype stores data in localStorage only (your browser). No data leaves your device in this version." data-hi="यह प्रोटोटाइप केवल localStorage (आपके ब्राउज़र) में डेटा संग्रहीत करता है। इस संस्करण में आपके डिवाइस से कोई डेटा बाहर नहीं जाता है।">
+            This prototype stores data in localStorage only (your browser). No data leaves your device in this version.
+          </div>
+        </section>
+
+        <section class="legal-section" id="pp-s4">
+          <h2 class="legal-section-heading" data-en="4. Your Rights Under DPDP Act 2023" data-hi="4. DPDP अधिनियम 2023 के तहत आपके अधिकार">4. Your Rights Under DPDP Act 2023</h2>
+          <p data-en="As a data principal under India's Digital Personal Data Protection Act 2023, you have the right to:" data-hi="भारत के डिजिटल व्यक्तिगत डेटा संरक्षण अधिनियम 2023 के तहत एक डेटा प्रिंसिपल के रूप में, आपके पास अधिकार है:">As a data principal under India's Digital Personal Data Protection Act 2023, you have the right to:</p>
+          <ul>
+            <li data-en="Access: Request a copy of all data we hold about you" data-hi="पहुंच: हमारे पास आपके बारे में मौजूद सभी डेटा की एक प्रति का अनुरोध करें"><strong>Access:</strong> Request a copy of all data we hold about you</li>
+            <li data-en="Correction: Ask us to fix inaccurate information" data-hi="सुधार: हमें गलत जानकारी ठीक करने के लिए कहें"><strong>Correction:</strong> Ask us to fix inaccurate information</li>
+            <li data-en="Erasure: Request complete deletion of your data at any time" data-hi="मिटाना: किसी भी समय अपने डेटा को पूरी तरह से हटाने का अनुरोध करें"><strong>Erasure:</strong> Request complete deletion of your data at any time</li>
+            <li data-en="Grievance: Raise a complaint with our Data Protection Officer" data-hi="शिकायत: हमारे डेटा संरक्षण अधिकारी के पास शिकायत दर्ज करें"><strong>Grievance:</strong> Raise a complaint with our Data Protection Officer</li>
+            <li data-en="Withdraw consent: Revoke any consent given, stopping all processing" data-hi="सहमति वापस लेना: दी गई किसी भी सहमति को रद्द करें, जिससे सभी प्रसंस्करण बंद हो जाएं"><strong>Withdraw consent:</strong> Revoke any consent given, stopping all processing</li>
+          </ul>
+          <p><span data-en="To exercise any right, email: " data-hi="किसी भी अधिकार का प्रयोग करने के लिए, ईमेल करें: ">To exercise any right, email: </span><a href="mailto:privacy@graamcredit.in">privacy@graamcredit.in</a><br><span data-en="We will respond within 7 business days." data-hi="हम 7 व्यावसायिक दिनों के भीतर जवाब देंगे।">We will respond within 7 business days.</span></p>
+        </section>
+
+        <section class="legal-section" id="pp-s5">
+          <h2 class="legal-section-heading" data-en="5. Cookies" data-hi="5. कुकीज़">5. Cookies</h2>
+          <p data-en="GraamCredit uses only essential cookies:" data-hi="ग्रामक्रेडिट केवल आवश्यक कुकीज़ का उपयोग करता है:">GraamCredit uses only essential cookies:</p>
+          <ul>
+            <li data-en="Session cookie: keeps you logged in during your application" data-hi="सत्र कुकी: आपके आवेदन के दौरान आपको लॉग इन रखती है"><strong>Session cookie:</strong> keeps you logged in during your application</li>
+            <li data-en="Preference cookie: remembers your language choice (EN/हिंदी)" data-hi="वरीयता कुकी: आपकी भाषा की पसंद (EN/हिंदी) को याद रखती है"><strong>Preference cookie:</strong> remembers your language choice (EN/हिंदी)</li>
+          </ul>
+          <p data-en="We do not use tracking, advertising, or analytics cookies. No third-party cookies are loaded on this site." data-hi="हम ट्रैकिंग, विज्ञापन या एनालिटिक्स कुकीज़ का उपयोग नहीं करते हैं। इस साइट पर कोई तृतीय-पक्ष कुकीज़ लोड नहीं की जाती हैं।">We do not use tracking, advertising, or analytics cookies. No third-party cookies are loaded on this site.</p>
+        </section>
+
+        <section class="legal-section" id="pp-s6">
+          <h2 class="legal-section-heading" data-en="6. Third Parties" data-hi="6. तीसरे पक्ष">6. Third Parties</h2>
+          <p data-en="We do not share your data with any third party. This prototype does not integrate with Account Aggregators, payment gateways, or any external APIs. All processing happens client-side." data-hi="हम आपका डेटा किसी तीसरे पक्ष के साथ साझा नहीं करते हैं। यह प्रोटोटाइप अकाउंट एग्रीगेटर्स, पेमेंट गेटवे या किसी बाहरी एपीआई के साथ एकीकृत नहीं होता है। सभी प्रसंस्करण क्लाइंट-साइड पर होता है।">We do not share your data with any third party. This prototype does not integrate with Account Aggregators, payment gateways, or any external APIs. All processing happens client-side.</p>
+        </section>
+
+        <section class="legal-section" id="pp-s7">
+          <h2 class="legal-section-heading" data-en="7. Changes to This Policy" data-hi="7. इस नीति में बदलाव">7. Changes to This Policy</h2>
+          <p data-en="We will notify you of material changes via a notice on the homepage at least 14 days before the change takes effect. Continued use of GraamCredit after that date constitutes acceptance." data-hi="हम परिवर्तन के प्रभावी होने से कम से कम 14 दिन पहले होमपेज पर एक नोटिस के माध्यम से आपको महत्वपूर्ण परिवर्तनों के बारे में सूचित करेंगे। उस तिथि के बाद ग्रामक्रेडिट का निरंतर उपयोग स्वीकृति माना जाएगा।">We will notify you of material changes via a notice on the homepage at least 14 days before the change takes effect. Continued use of GraamCredit after that date constitutes acceptance.</p>
+        </section>
+
+        <section class="legal-section" id="pp-s8">
+          <h2 class="legal-section-heading" data-en="8. Contact" data-hi="8. संपर्क">8. Contact</h2>
+          <p>
+            <strong>Data Protection Officer:</strong> Raj (Student Project)<br>
+            <strong>Email:</strong> <a href="mailto:privacy@graamcredit.in">privacy@graamcredit.in</a><br>
+            <strong>Response time:</strong> 7 business days
+          </p>
+        </section>
+
+      </div><!-- /legal-content -->
+    </div><!-- /legal-layout -->
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <a href="index.html" class="footer-logo">
+            <span class="logo-icon">G</span>
+            <span>GraamCredit</span>
+          </a>
+          <p class="footer-tagline" data-en="AI-powered microloan eligibility for rural India" data-hi="ग्रामीण भारत के लिए AI-संचालित माइक्रोलोन पात्रता">AI-powered microloan eligibility for rural India</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="ri-linkedin-line"></i></a>
+            <a href="#" aria-label="GitHub"><i class="ri-github-line"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Product" data-hi="उत्पाद">Product</p>
+          <ul class="footer-nav-list">
+            <li><a href="how-it-works.html" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a></li>
+            <li><a href="form.html" data-en="Check eligibility" data-hi="पात्रता की जांच करें">Check eligibility</a></li>
+            <li><a href="faq.html" data-en="FAQ" data-hi="FAQ">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Company" data-hi="कंपनी">Company</p>
+          <ul class="footer-nav-list">
+            <li><a href="privacy-policy.html" data-en="Privacy Policy" data-hi="गोपनीयता नीति">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html" data-en="Terms of Service" data-hi="सेवा की शर्तें">Terms of Service</a></li>
+            <li><a href="contact-us.html" data-en="Contact Us" data-hi="संपर्क करें">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-heading" data-en="Compliance" data-hi="अनुपालन">Compliance</p>
+          <ul class="footer-compliance-list">
+            <li data-en="RBI Master Directions 2022" data-hi="RBI मास्टर निर्देश 2022">RBI Master Directions 2022</li>
+            <li data-en="India DPDP Act 2023" data-hi="भारत DPDP अधिनियम 2023">India DPDP Act 2023</li>
+            <li data-en="Collateral-free per RBI guidelines" data-hi="RBI दिशानिर्देशों के अनुसार संपार्श्विक-मुक्त">Collateral-free per RBI guidelines</li>
+            <li data-en="Data encrypted at rest + transit" data-hi="डेटा आराम + पारगमन में एन्क्रिप्टेड">Data encrypted at rest + transit</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-en="© 2025 GraamCredit. Built as a student social project." data-hi="© 2025 ग्रामक्रेडिट। एक छात्र सामाजिक परियोजना के रूप में निर्मित।">© 2025 GraamCredit. Built as a student social project.</p>
+        <p data-en="Not a registered NBFC. For educational purposes only." data-hi="पंजीकृत NBFC नहीं। केवल शैक्षिक उद्देश्यों के लिए।">Not a registered NBFC. For educational purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="lang-config.js"></script>
+  <script>
+    // Sticky TOC active highlight
+    const sections = document.querySelectorAll('.legal-section');
+    const tocLinks = document.querySelectorAll('.legal-toc-list a');
+    window.addEventListener('scroll', function() {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      tocLinks.forEach(a => {
+        a.classList.toggle('toc-active', a.getAttribute('href') === '#' + current);
+      });
+    });
+    // Mobile TOC select
+    document.getElementById('tocSelect').addEventListener('change', function() {
+      const target = document.querySelector(this.value);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
+

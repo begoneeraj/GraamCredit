@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+scikit-learn
+joblib
+numpy
+pandas
+python-dotenv
+python-multipart
+pdfplumber
+httpx

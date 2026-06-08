@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Result GraamCredit Eligibility</title>
+  <meta name="description" content="Your GraamCredit microloan eligibility result." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-icon">G</span>
+        <span>GraamCredit</span>
+      </a>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()">
+        <span class="globe-icon">&#127760;</span>
+        <span id="langLabel" data-custom-toggle="target">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="result-page">
+    <div class="result-card" id="resultCard">
+      <div style="text-align:center; padding: 40px 0;">
+        <div class="spinner" style="margin: 0 auto 16px;"></div>
+        <p style="color: var(--text-light);">Loading result...</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 GraamCredit. Made with &#10084;&#65039; for rural India.</p>
+    </div>
+  </footer>
+
+  <script src="lang-config.js?v=2"></script>
+  <script src="result.js?v=2"></script>
+</body>
+</html>
