@@ -1,0 +1,22 @@
+# Secrets
+.env
+
+# Database
+graamcredit.db
+
+# ML model binary
+ml/model.pkl
+
+# Virtual environment
+venv/
+
+# Python bytecode cache (all nested dirs)
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# General
+.DS_Store
+Thumbs.db
+*.log
