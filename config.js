@@ -7,4 +7,4 @@
  * Local dev  : http://127.0.0.1:8000
  * Render/Railway: https://graamcredit-api.onrender.com  (example)
  */
-window.GRAAMCREDIT_API = 'https://backyard-garlic-flagstone.ngrok-free.dev';
+window.GRAAMCREDIT_API = 'https://graamcredit.onrender.com';
