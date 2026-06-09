@@ -128,17 +128,33 @@ async def aa_initiate(req: AAInitiateRequest):
         "dataLife": {"unit": "MONTH", "value": 0},
     }
 
-    async with httpx.AsyncClient(timeout=15) as client:
-        resp = await client.post(
-            f"{cfg['base']}/v2/consents",
-            headers=_headers(cfg),
-            json=consent_payload,
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                f"{cfg['base']}/v2/consents",
+                headers=_headers(cfg),
+                json=consent_payload,
+            )
+    except httpx.TimeoutException as exc:
+        print(f"[AA] /aa/initiate timeout calling Setu: {exc}")
+        raise HTTPException(
+            status_code=504,
+            detail=f"Setu API timed out after 30s. Check SETU_BASE_URL ({cfg['base']}) is reachable.",
         )
-
-    if resp.status_code not in (200, 201):
+    except httpx.RequestError as exc:
+        print(f"[AA] /aa/initiate connection error calling Setu: {exc}")
         raise HTTPException(
             status_code=502,
-            detail=f"Setu consent creation failed: {resp.text[:200]}",
+            detail=f"Could not reach Setu API at {cfg['base']}: {exc}",
+        )
+
+    print(f"[AA] /aa/initiate Setu response: status={resp.status_code} body={resp.text[:300]}")
+
+    if resp.status_code not in (200, 201):
+        print(f"[AA] /aa/initiate Setu error: status={resp.status_code} body={resp.text}")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Setu consent creation failed (HTTP {resp.status_code}): {resp.text[:300]}",
         )
 
     data = resp.json()
