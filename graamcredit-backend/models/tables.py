@@ -45,3 +45,27 @@ class ContactMessage(Base):
     message = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)
     replied = Column(Boolean, default=False)
+
+
+class AASession(Base):
+    """
+    Account Aggregator consent session — backs both the mock AA flow
+    (see routes/account_aggregator.py) and, when USE_MOCK_AA=false, the
+    real Setu integration. Persists across requests instead of the old
+    in-memory dict so the flow survives server restarts.
+    """
+    __tablename__ = "aa_sessions"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    session_id = Column(String(64), unique=True, nullable=False, index=True)
+    consent_handle = Column(String(64), unique=True, nullable=False)
+    mobile = Column(String(50))
+    purpose = Column(String(200))
+    status = Column(String(20), default="pending")  # pending|approved|denied|fi_ready|error
+    bank_name = Column(String(100), nullable=True)
+    account_masked = Column(String(50), nullable=True)
+    ifsc = Column(String(20), nullable=True)
+    fi_data = Column(Text, nullable=True)          # JSON: AAFetchResponse fields
+    transactions = Column(Text, nullable=True)      # JSON: list of raw transactions
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -458,7 +458,10 @@ function applyFormLanguage() {
   if (currentStep === 5) buildReview();
 }
 
-// ---- Account Aggregator (Setu AA) — Phase 3 ----
+// ---- Account Aggregator (mock AA — see backend/routes/account_aggregator.py) ----
+// Simulates the RBI-regulated consent flow end-to-end (no real Setu/Finvu call).
+
+const _AA_BANK_ICONS = ['🏦 SBI', '🏛️ HDFC', '🏢 ICICI', '💠 Axis', '🏤 PNB'];
 
 async function initiateAA() {
   const vua = document.getElementById('aaVua').value.trim();
@@ -479,7 +482,8 @@ async function initiateAA() {
   btn.disabled = true;
 
   try {
-    const res = await fetch(`${window.GRAAMCREDIT_API || 'http://127.0.0.1:8000'}/api/aa/initiate`, {
+    const base = window.GRAAMCREDIT_API || 'http://127.0.0.1:8000';
+    const res = await fetch(`${base}/api/aa/initiate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ customer_id: vua }),
@@ -492,19 +496,24 @@ async function initiateAA() {
 
     const data = await res.json();
 
-    // Open Setu consent URL in new tab
-    window.open(data.redirect_url, '_blank', 'noopener');
+    if (data.redirect_url) {
+      // Real Setu mode (USE_MOCK_AA=false) — open the actual consent UI.
+      window.open(data.redirect_url, '_blank', 'noopener');
+      statusEl.className = 'pdf-status success';
+      statusEl.innerHTML = `
+        <i class="ri-check-line"></i>
+        Consent page opened in a new tab. Approve it, then come back and click
+        <strong>"Check Status"</strong> below.
+        <br><br>
+        <button type="button" onclick="pollAA('${data.session_id}')"
+          style="background:#6366F1;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.82rem;">
+          Check Status
+        </button>`;
+      return;
+    }
 
-    statusEl.className = 'pdf-status success';
-    statusEl.innerHTML = `
-      <i class="ri-check-line"></i>
-      Consent page opened in a new tab. Approve it, then come back and click
-      <strong>"Check Status"</strong> below.
-      <br><br>
-      <button type="button" onclick="pollAA('${data.session_id}')"
-        style="background:#6366F1;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.82rem;">
-        Check Status
-      </button>`;
+    // Mock mode — show the simulated consent-approval card.
+    _renderAAConsentCard(data.session_id);
   } catch (err) {
     statusEl.className = 'pdf-status error';
     statusEl.innerHTML = err.message.includes('not configured')
@@ -514,7 +523,89 @@ async function initiateAA() {
   }
 }
 
+function _renderAAConsentCard(sessionId) {
+  const statusEl = document.getElementById('aaStatus');
+  statusEl.className = 'pdf-status loading';
+  statusEl.innerHTML = `
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+      ${_AA_BANK_ICONS.map(b => `<span style="background:#fff;border:1px solid #C7D2FE;border-radius:6px;padding:4px 10px;font-size:0.78rem;font-weight:600;color:#4338CA;">${b}</span>`).join('')}
+    </div>
+    <div style="font-weight:600;color:#4338CA;margin-bottom:6px;">
+      <i class="ri-shield-check-line"></i> Consent request created — approve it on your Account Aggregator app.
+    </div>
+    <div style="font-size:0.8rem;color:#4B5563;margin-bottom:10px;">
+      By approving, you allow GraamCredit to view (not control) your account statements for loan underwriting only.
+    </div>
+    <button type="button" id="aaApproveBtn" onclick="approveAA('${sessionId}')"
+      style="background:#16a34a;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer;">
+      <i class="ri-checkbox-circle-line"></i> Approve consent request
+    </button>`;
+}
+
+async function approveAA(sessionId) {
+  const statusEl = document.getElementById('aaStatus');
+  const approveBtn = document.getElementById('aaApproveBtn');
+  if (approveBtn) approveBtn.disabled = true;
+
+  statusEl.className = 'pdf-status loading';
+  statusEl.innerHTML = '<i class="ri-loader-4-line"></i> Waiting for your bank to confirm consent…';
+
+  try {
+    const base = window.GRAAMCREDIT_API || 'http://127.0.0.1:8000';
+    const res = await fetch(`${base}/api/aa/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || `Server error ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    if (data.status === 'error') {
+      statusEl.className = 'pdf-status error';
+      statusEl.innerHTML = `
+        <i class="ri-error-warning-line"></i> ${data.message || 'Could not confirm consent with your bank.'}
+        <br><br>
+        <button type="button" onclick="approveAA('${sessionId}')"
+          style="background:#6366F1;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.82rem;">
+          Retry
+        </button>`;
+      return;
+    }
+
+    const [accountsRes, fiRes] = await Promise.all([
+      fetch(`${base}/api/aa/accounts/${sessionId}`),
+      fetch(`${base}/api/aa/fetch/${sessionId}`),
+    ]);
+    const accountsData = await accountsRes.json();
+    const fi = await fiRes.json();
+
+    _autofillFromStatement(fi);
+
+    const acct = accountsData.accounts && accountsData.accounts[0];
+    const acctLine = acct ? `${acct.bank_name} · ${acct.account_masked}` : 'your linked bank account';
+
+    statusEl.className = 'pdf-status success';
+    statusEl.innerHTML = `
+      <i class="ri-check-line"></i> Data fetched successfully from <strong>${acctLine}</strong>.
+      Fields below have been auto-filled — please verify.`;
+  } catch (err) {
+    statusEl.className = 'pdf-status error';
+    statusEl.innerHTML = `<i class="ri-error-warning-line"></i> ${err.message || 'Something went wrong. Please try again.'}
+      <br><br>
+      <button type="button" onclick="approveAA('${sessionId}')"
+        style="background:#6366F1;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.82rem;">
+        Retry
+      </button>`;
+  }
+}
+
 async function pollAA(sessionId) {
+  // Real Setu mode only (USE_MOCK_AA=false) — mock mode uses approveAA() above.
   const statusEl = document.getElementById('aaStatus');
   statusEl.className = 'pdf-status loading';
   statusEl.innerHTML = '<i class="ri-loader-4-line"></i> Checking consent status…';

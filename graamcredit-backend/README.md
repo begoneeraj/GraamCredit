@@ -71,6 +71,26 @@ CORS is pre-configured for both `localhost:5500` and `127.0.0.1:5500`.
 | POST | `/api/contact` | Submit contact form message |
 | POST | `/api/score` | Quick ML score without saving |
 | DELETE | `/api/application/{id}` | Erase personal data (DPDP Act) |
+| POST | `/api/aa/initiate` | Account Aggregator: create a consent request |
+| POST | `/api/aa/approve` | Account Aggregator: approve the consent (mock flow) |
+| GET | `/api/aa/accounts/{session_id}` | Account Aggregator: linked bank account(s) |
+| GET | `/api/aa/status/{session_id}` | Account Aggregator: poll consent/data status |
+| GET | `/api/aa/fetch/{session_id}` | Account Aggregator: fetch parsed financial fields |
+| GET | `/api/aa/data/{session_id}` | Account Aggregator: fetch balance + transaction detail |
+
+### Account Aggregator (Setu/Finvu) — simulated, architecture-complete
+
+The eligibility form's "Share Bank Data via Account Aggregator" option is
+**currently a simulated/mock AA flow** — not "coming soon". The real Setu AA
+sandbox requires registered business KYC (GST / incorporation documents) that
+isn't available to an individual/student developer, so `routes/account_aggregator.py`
+ships a mock layer that reproduces the full consent → bank-linking → data-fetch
+flow with realistic synthetic data, using the exact same routes, request/response
+shapes, and downstream feature schema the real integration would use. The
+original Setu implementation is preserved (commented, inactive) in the same
+file and can be re-enabled with `USE_MOCK_AA=false` in `.env` plus valid Setu
+credentials — no rewrite required once business KYC is available. In short:
+**production-ready pending business KYC**, working end-to-end today as a demo.
 
 ---
 
@@ -82,7 +102,9 @@ graamcredit-backend/
 ├── routes/
 │   ├── application.py    ← /apply, /application/{id}, /stats, DELETE
 │   ├── score.py          ← /score (quick ML endpoint)
-│   └── contact.py        ← /contact
+│   ├── contact.py        ← /contact
+│   ├── pdf_parse.py      ← /parse-statement (PDF bank statement upload)
+│   └── account_aggregator.py  ← /aa/* (mock AA flow; real Setu code preserved, USE_MOCK_AA toggle)
 ├── models/
 │   ├── database.py       ← SQLAlchemy engine + session
 │   ├── schemas.py        ← Pydantic request/response models

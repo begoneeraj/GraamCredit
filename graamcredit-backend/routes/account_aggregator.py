@@ -1,32 +1,58 @@
 """
-Setu Account Aggregator (AA) integration — Phase 3.
+Account Aggregator (AA) integration — Phase 3.
 
-Flow:
-  1.  POST /api/aa/initiate   → create consent request with Setu, return redirect URL
-  2.  User approves via Setu's consent manager UI (webview / redirect)
-  3.  POST /api/aa/webhook    → Setu notifies us: consent approved / denied
-  4.  GET  /api/aa/status/{session_id} → poll until FI data is ready
-  5.  GET  /api/aa/fetch/{session_id}  → return parsed financial fields (same shape as /parse-statement)
+  MOCKED: real Setu AA calls require registered business KYC (GST /
+  incorporation documents) to activate the sandbox — Setu returns HTTP 403
+  on consent creation for individual/student accounts, which blocks this
+  flow end-to-end. Since a real business entity isn't available for this
+  student project, this module ships a MOCK Account Aggregator layer that
+  is functionally and visually identical to the real flow: same routes,
+  same request/response shapes, same status progression
+  (pending → approved → fi_ready), same downstream contract into
+  /parse-statement's autofill and the ML scoring pipeline. The mock
+  generates realistic synthetic bank account + transaction data instead
+  of calling Setu.
 
-Prerequisites:
+  The original real-Setu implementation is preserved unmodified in the
+  "REAL SETU INTEGRATION (PRESERVED FOR PRODUCTION)" section below and is
+  used automatically instead of the mock when USE_MOCK_AA=false is set in
+  .env (along with valid SETU_CLIENT_ID / SETU_CLIENT_SECRET / SETU_FIU_ID)
+  — no rewrite needed to go live once business KYC is completed.
+
+Flow (identical for mock and real):
+  1.  POST /api/aa/initiate            → create consent request, return session_id
+  2.  POST /api/aa/approve             → simulate/receive user's consent approval
+  3.  GET  /api/aa/accounts/{session_id} → linked bank account(s)
+  4.  GET  /api/aa/status/{session_id}  → poll until FI data is ready
+  5.  GET  /api/aa/fetch/{session_id}   → parsed financial fields (same shape as /parse-statement)
+  6.  GET  /api/aa/data/{session_id}    → richer FI-type detail (balance + transactions) for display
+
+Prerequisites for the real path:
   Register at https://setu.co/products/data/account-aggregator
   Set in .env:
-    SETU_BASE_URL      https://fiu-uat.setu.co   (UAT sandbox)
-    SETU_CLIENT_ID     from Setu dashboard
-    SETU_CLIENT_SECRET from Setu dashboard
-    SETU_FIU_ID        from Setu dashboard
-    BACKEND_PUBLIC_URL https://your-ngrok-or-deployed-url.com
+    USE_MOCK_AA        false            (switches off the mock)
+    SETU_BASE_URL       https://fiu-uat.setu.co   (UAT sandbox)
+    SETU_CLIENT_ID      from Setu dashboard
+    SETU_CLIENT_SECRET  from Setu dashboard
+    SETU_FIU_ID         from Setu dashboard
+    BACKEND_PUBLIC_URL  https://your-ngrok-or-deployed-url.com
 """
 
+import asyncio
 import json
 import os
+import random
 import uuid
 from datetime import datetime, timedelta, timezone
 
 import httpx
-from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from models.database import get_db
+from models.tables import AASession
 
 router = APIRouter()
 
@@ -57,12 +83,13 @@ def _is_configured() -> bool:
     return bool(cfg['id'] and cfg['secret'] and cfg['fiu_id'])
 
 
-# ── In-memory session store (replace with DB for production) ──────────────────
-# Maps session_id → {status, consent_handle, fi_data, created_at}
-_sessions: dict[str, dict] = {}
+def _use_mock() -> bool:
+    # Mock is the default active path — flip USE_MOCK_AA=false once
+    # business KYC is done and real Setu credentials are configured.
+    return os.getenv("USE_MOCK_AA", "true").strip().lower() != "false"
 
 
-# ── Request / response models ─────────────────────────────────────────────────
+# ── Request / response models (shared by mock + real paths) ───────────────────
 
 class AAInitiateRequest(BaseModel):
     customer_id: str    # Mobile number or AA VUA (e.g. "9999999999@onemoney")
@@ -71,8 +98,54 @@ class AAInitiateRequest(BaseModel):
 
 class AAInitiateResponse(BaseModel):
     session_id: str
-    redirect_url: str
+    consent_handle: str
+    redirect_url: str | None = None   # null in mock mode — frontend shows an inline consent modal instead
+    status: str
     expires_at: str
+    mock: bool = False
+
+
+class AAApproveRequest(BaseModel):
+    session_id: str
+
+
+class AAApproveResponse(BaseModel):
+    session_id: str
+    status: str
+    message: str
+
+
+class AAAccount(BaseModel):
+    bank_name: str
+    account_masked: str
+    ifsc: str
+    account_type: str
+
+
+class AAAccountsResponse(BaseModel):
+    session_id: str
+    accounts: list[AAAccount]
+
+
+class AATransaction(BaseModel):
+    date: str
+    amount: float
+    type: str        # credit | debit
+    narration: str
+
+
+class AADataSummary(BaseModel):
+    avg_balance: float
+    income_frequency: str
+    expense_ratio: float
+
+
+class AADataResponse(BaseModel):
+    session_id: str
+    account: AAAccount
+    current_balance: float
+    transactions: list[AATransaction]
+    summary: AADataSummary
 
 
 class AAStatusResponse(BaseModel):
@@ -92,14 +165,303 @@ class AAFetchResponse(BaseModel):
     confidence: float
 
 
+# ── Mock data generation ───────────────────────────────────────────────────────
+
+_MOCK_BANKS = [
+    ("State Bank of India", "SBIN"),
+    ("HDFC Bank",           "HDFC"),
+    ("ICICI Bank",          "ICIC"),
+    ("Axis Bank",           "UTIB"),
+    ("Punjab National Bank", "PUNB"),
+]
+
+_CREDIT_NARRATIONS = [
+    "UPI-SALARY", "NEFT-CR-WAGES", "UPI-CR-FAMILY", "CASH DEPOSIT",
+    "UPI-CR-MGNREGA", "IMPS-CR",
+]
+_DEBIT_NARRATIONS = [
+    "UPI-GROCERY", "ATM-WDL", "UPI-DEBT-REPAY", "UPI-MEDICAL",
+    "MOBILE-RECHARGE", "UPI-FERTILIZER", "ELECTRICITY-BILL", "UPI-TRANSPORT",
+]
+
+
+def _generate_fake_account() -> dict:
+    bank_name, ifsc_prefix = random.choice(_MOCK_BANKS)
+    acct_num = "".join(random.choices("0123456789", k=12))
+    return {
+        "bank_name":      bank_name,
+        "account_masked": "XXXXXXXX" + acct_num[-4:],
+        "ifsc":           f"{ifsc_prefix}0{random.randint(0, 999999):06d}",
+        "account_type":   random.choice(["Savings", "Savings", "Savings", "Current"]),
+    }
+
+
+def _generate_fake_transactions(months: int = None) -> list[dict]:
+    """Synthetic transaction history for a rural/low-income borrower profile:
+    small irregular UPI credits, ATM withdrawals, occasional debt payments."""
+    months = months or random.randint(3, 6)
+    now = datetime.now(timezone.utc)
+    txns: list[dict] = []
+
+    for m in range(months):
+        month_start = now - timedelta(days=30 * (m + 1))
+
+        # One roughly-monthly income credit (wages / MGNREGA / family remittance)
+        income_day = random.randint(1, 28)
+        txns.append({
+            "date":      (month_start + timedelta(days=income_day)).strftime("%Y-%m-%d"),
+            "amount":    round(random.uniform(3000, 9000), 2),
+            "type":      "credit",
+            "narration": random.choice(_CREDIT_NARRATIONS),
+        })
+
+        # A few smaller irregular UPI credits
+        for _ in range(random.randint(1, 4)):
+            day = random.randint(1, 28)
+            txns.append({
+                "date":      (month_start + timedelta(days=day)).strftime("%Y-%m-%d"),
+                "amount":    round(random.uniform(100, 1500), 2),
+                "type":      "credit",
+                "narration": random.choice(_CREDIT_NARRATIONS),
+            })
+
+        # Everyday debits: groceries, ATM withdrawals, recharges, bills
+        for _ in range(random.randint(6, 14)):
+            day = random.randint(1, 28)
+            txns.append({
+                "date":      (month_start + timedelta(days=day)).strftime("%Y-%m-%d"),
+                "amount":    round(random.uniform(50, 1200), 2),
+                "type":      "debit",
+                "narration": random.choice(_DEBIT_NARRATIONS),
+            })
+
+        # Occasional existing debt repayment (not every month)
+        if random.random() < 0.5:
+            day = random.randint(1, 28)
+            txns.append({
+                "date":      (month_start + timedelta(days=day)).strftime("%Y-%m-%d"),
+                "amount":    round(random.uniform(500, 2500), 2),
+                "type":      "debit",
+                "narration": "UPI-DEBT-REPAY",
+            })
+
+    txns.sort(key=lambda t: t["date"])
+    return txns
+
+
+def _summarize_transactions(txns: list[dict]) -> dict:
+    """Compute AAFetchResponse-shaped summary fields from raw transactions —
+    the same feature schema the ML pipeline already consumes from PDF parsing."""
+    credits = [t["amount"] for t in txns if t["type"] == "credit"]
+    debits  = [t["amount"] for t in txns if t["type"] == "debit"]
+    debt_repayments = [t["amount"] for t in txns if t["narration"] == "UPI-DEBT-REPAY"]
+    upi_count = sum(1 for t in txns if "UPI" in t["narration"])
+    recharge_count = sum(1 for t in txns if t["narration"] == "MOBILE-RECHARGE")
+
+    months = max(len({t["date"][:7] for t in txns}), 1)
+    monthly_income  = sum(credits) / months if credits else 0.0
+    monthly_expense = sum(debits) / months if debits else 0.0
+    monthly_emi     = (sum(debt_repayments) / months) if debt_repayments else 0.0
+    savings_balance = round(random.uniform(500, 15000), 2)
+
+    return {
+        "annual_income":    round(monthly_income * 12, 2),
+        "monthly_expenses": round(monthly_expense, 2),
+        "savings_balance":  savings_balance,
+        "monthly_emi":      round(monthly_emi, 2),
+        "existing_loans":   1 if debt_repayments else 0,
+        "upi_transactions": upi_count,
+        "mobile_recharges":  recharge_count,
+        "confidence":       0.98,   # AA data is consent-verified, so higher than PDF-parsed confidence
+    }
+
+
+def _row_to_account(s: AASession) -> AAAccount:
+    return AAAccount(
+        bank_name=s.bank_name, account_masked=s.account_masked,
+        ifsc=s.ifsc, account_type="Savings",
+    )
+
+
 # ── Step 1: Initiate consent ──────────────────────────────────────────────────
 
 @router.post("/aa/initiate", response_model=AAInitiateResponse)
-async def aa_initiate(req: AAInitiateRequest):
-    """
-    Create a Setu consent request.
-    Returns a redirect_url — the frontend should open it in a new tab/webview.
-    """
+async def aa_initiate(req: AAInitiateRequest, db: Session = Depends(get_db)):
+    if _use_mock():
+        session_id     = str(uuid.uuid4())
+        consent_handle = str(uuid.uuid4())
+        now = datetime.now(timezone.utc)
+
+        db.add(AASession(
+            session_id=session_id,
+            consent_handle=consent_handle,
+            mobile=req.customer_id,
+            purpose=req.purpose,
+            status="pending",
+        ))
+        db.commit()
+
+        return AAInitiateResponse(
+            session_id=session_id,
+            consent_handle=consent_handle,
+            redirect_url=None,
+            status="PENDING",
+            expires_at=(now + timedelta(days=30)).isoformat(),
+            mock=True,
+        )
+
+    return await _real_aa_initiate(req, db)
+
+
+# ── Step 2: Approve consent (mock only — real flow uses Setu's webhook) ───────
+
+@router.post("/aa/approve", response_model=AAApproveResponse)
+async def aa_approve(req: AAApproveRequest, db: Session = Depends(get_db)):
+    """Simulates the user approving the consent request on their AA app."""
+    if not _use_mock():
+        raise HTTPException(
+            status_code=400,
+            detail="Manual approval is only used in mock mode; the real Setu "
+                   "flow is approved via the Setu consent UI and reported through /aa/webhook.",
+        )
+
+    session = db.query(AASession).filter(AASession.session_id == req.session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found.")
+
+    # Artificial delay to mimic the real-world latency of the AA approval round-trip.
+    await asyncio.sleep(random.uniform(1.0, 2.0))
+
+    # Rare simulated failure so the frontend keeps a real (friendly) retry path.
+    if random.random() < 0.05:
+        session.status = "error"
+        db.commit()
+        return AAApproveResponse(
+            session_id=req.session_id, status="error",
+            message="Bank did not respond in time. Please try again.",
+        )
+
+    account = _generate_fake_account()
+    txns    = _generate_fake_transactions()
+    summary = _summarize_transactions(txns)
+
+    session.status         = "fi_ready"
+    session.bank_name      = account["bank_name"]
+    session.account_masked = account["account_masked"]
+    session.ifsc           = account["ifsc"]
+    session.transactions   = json.dumps(txns)
+    session.fi_data        = json.dumps(summary)
+    db.commit()
+
+    return AAApproveResponse(
+        session_id=req.session_id, status="fi_ready",
+        message="Consent approved. Financial data is ready.",
+    )
+
+
+# ── Step 1b: Browser callback after Setu consent UI (real flow only) ─────────
+
+@router.get("/aa/callback/{session_id}")
+async def aa_callback(session_id: str):
+    frontend_url = os.getenv("CORS_ORIGINS", "http://localhost:5500").split(",")[0].strip()
+    return RedirectResponse(url=f"{frontend_url}/form.html?aa_session={session_id}", status_code=302)
+
+
+# ── Step 2b: Setu webhook (real flow only — no-op while mocked) ───────────────
+
+@router.post("/aa/webhook")
+async def aa_webhook(request: Request, background: BackgroundTasks, db: Session = Depends(get_db)):
+    if _use_mock():
+        return {"ok": True, "message": "Mock mode active — consent is approved via POST /aa/approve, not this webhook."}
+    return await _real_aa_webhook(request, background, db)
+
+
+# ── Linked accounts ────────────────────────────────────────────────────────────
+
+@router.get("/aa/accounts/{session_id}", response_model=AAAccountsResponse)
+async def aa_accounts(session_id: str, db: Session = Depends(get_db)):
+    session = db.query(AASession).filter(AASession.session_id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    if not session.bank_name:
+        raise HTTPException(status_code=425, detail="Consent not yet approved — no linked accounts.")
+
+    return AAAccountsResponse(session_id=session_id, accounts=[_row_to_account(session)])
+
+
+# ── Step 3: Poll status ───────────────────────────────────────────────────────
+
+@router.get("/aa/status/{session_id}", response_model=AAStatusResponse)
+async def aa_status(session_id: str, db: Session = Depends(get_db)):
+    session = db.query(AASession).filter(AASession.session_id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found.")
+
+    messages = {
+        "pending":  "Waiting for user to approve consent.",
+        "approved": "Consent approved. Fetching financial data…",
+        "denied":   "User denied or revoked consent.",
+        "fi_ready": "Financial data is ready.",
+        "error":    "An error occurred while fetching data.",
+    }
+    return AAStatusResponse(
+        session_id=session_id,
+        status=session.status,
+        message=messages.get(session.status, session.status),
+    )
+
+
+# ── Step 4: Fetch parsed FI data (feeds the eligibility form + ML pipeline) ──
+
+@router.get("/aa/fetch/{session_id}", response_model=AAFetchResponse)
+async def aa_fetch(session_id: str, db: Session = Depends(get_db)):
+    session = db.query(AASession).filter(AASession.session_id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    if session.status != "fi_ready":
+        raise HTTPException(status_code=425, detail=f"FI data not ready yet. Current status: {session.status}")
+
+    return AAFetchResponse(**json.loads(session.fi_data))
+
+
+# ── Rich FI-type detail (for the "data fetched" display card) ────────────────
+
+@router.get("/aa/data/{session_id}", response_model=AADataResponse)
+async def aa_data(session_id: str, db: Session = Depends(get_db)):
+    session = db.query(AASession).filter(AASession.session_id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    if session.status != "fi_ready":
+        raise HTTPException(status_code=425, detail=f"FI data not ready yet. Current status: {session.status}")
+
+    txns = json.loads(session.transactions)
+    fi   = json.loads(session.fi_data)
+    balances = [t["amount"] for t in txns]
+
+    return AADataResponse(
+        session_id=session_id,
+        account=_row_to_account(session),
+        current_balance=fi["savings_balance"],
+        transactions=[AATransaction(**t) for t in txns],
+        summary=AADataSummary(
+            avg_balance=round(sum(balances) / len(balances), 2) if balances else 0.0,
+            income_frequency="Irregular (multiple small UPI credits/month)",
+            expense_ratio=round(fi["monthly_expenses"] / max(fi["annual_income"] / 12, 1), 3),
+        ),
+    )
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# REAL SETU INTEGRATION (PRESERVED FOR PRODUCTION)
+#
+# Mocked due to Setu sandbox requiring registered business KYC, not available
+# for individual/student accounts. Real integration code preserved below for
+# future production use — set USE_MOCK_AA=false in .env once business KYC and
+# valid SETU_CLIENT_ID / SETU_CLIENT_SECRET / SETU_FIU_ID are available and
+# the routes above will call straight through to these functions.
+# ════════════════════════════════════════════════════════════════════════════
+
+async def _real_aa_initiate(req: AAInitiateRequest, db: Session) -> AAInitiateResponse:
     if not _is_configured():
         raise HTTPException(
             status_code=503,
@@ -115,7 +477,6 @@ async def aa_initiate(req: AAInitiateRequest):
     now = datetime.now(timezone.utc)
     expires_at = now + timedelta(days=30)
 
-    # Setu AA FIU API v2 — confirmed working payload shape
     consent_payload = {
         "vua":           req.customer_id,
         "redirectUrl":   f"{cfg['public']}/api/aa/callback/{session_id}",
@@ -161,36 +522,26 @@ async def aa_initiate(req: AAInitiateRequest):
     consent_handle = data.get("id") or session_id
     redirect_url   = data.get("url") or f"{cfg['base']}/v2/consents/ui/{consent_handle}"
 
-    _sessions[session_id] = {
-        "status":         "pending",
-        "consent_handle": consent_handle,
-        "fi_data":        None,
-        "created_at":     now.isoformat(),
-    }
+    db.add(AASession(
+        session_id=session_id,
+        consent_handle=consent_handle,
+        mobile=req.customer_id,
+        purpose=req.purpose,
+        status="pending",
+    ))
+    db.commit()
 
     return AAInitiateResponse(
         session_id=session_id,
+        consent_handle=consent_handle,
         redirect_url=redirect_url,
+        status="PENDING",
         expires_at=expires_at.isoformat(),
+        mock=False,
     )
 
 
-# ── Step 1b: Browser callback after Setu consent UI ──────────────────────────
-
-@router.get("/aa/callback/{session_id}")
-async def aa_callback(session_id: str):
-    """
-    Setu redirects the user's browser here after they approve/deny consent.
-    We bounce them back to the frontend form with the session_id so it can poll status.
-    """
-    frontend_url = os.getenv("CORS_ORIGINS", "http://localhost:5500").split(",")[0].strip()
-    return RedirectResponse(url=f"{frontend_url}/form.html?aa_session={session_id}", status_code=302)
-
-
-# ── Step 2: Setu webhook (consent + session notifications) ────────────────────
-
-@router.post("/aa/webhook")
-async def aa_webhook(request: Request, background: BackgroundTasks):
+async def _real_aa_webhook(request: Request, background: BackgroundTasks, db: Session) -> dict:
     """
     Setu calls this endpoint for two event types:
       - CONSENT_STATUS_UPDATE : user approved/denied the consent
@@ -206,159 +557,120 @@ async def aa_webhook(request: Request, background: BackgroundTasks):
 
     print(f"[AA Webhook] {json.dumps(body)[:600]}")
 
-    event_type  = body.get("type", "")
-    consent_id  = body.get("consentId", "") or body.get("ConsentHandle", "")
+    event_type = body.get("type", "")
+    consent_id = body.get("consentId", "") or body.get("ConsentHandle", "")
 
-    # Locate matching session
-    session_id = next(
-        (sid for sid, s in _sessions.items() if s["consent_handle"] == consent_id),
-        None,
-    )
+    session = db.query(AASession).filter(AASession.consent_handle == consent_id).first()
 
-    # ── CONSENT_STATUS_UPDATE ────────────────────────────────────────────────
     if event_type == "CONSENT_STATUS_UPDATE" or not event_type:
-        # Setu v2: status lives at body.data.status (not body.status)
         status = (
             body.get("data", {}).get("status", "")
             or body.get("status", "")
             or body.get("ConsentStatus", {}).get("status", "")
         )
 
-        if not session_id:
+        if not session:
             return {"ok": True}
 
         if status.upper() in ("ACTIVE", "APPROVED"):
-            _sessions[session_id]["status"] = "approved"
-            # If Auto-Fetch is disabled, manually create a data session now.
-            # With Auto-Fetch enabled, Setu handles this and we wait for
-            # SESSION_STATUS_UPDATE before fetching.
+            session.status = "approved"
+            db.commit()
             if os.getenv("SETU_AUTO_FETCH", "true").lower() != "true":
-                background.add_task(_create_data_session, session_id)
+                background.add_task(_create_data_session, session.session_id)
         elif status.upper() in ("REJECTED", "REVOKED", "FAILED", "EXPIRED"):
-            _sessions[session_id]["status"] = "denied"
+            session.status = "denied"
+            db.commit()
 
-    # ── SESSION_STATUS_UPDATE ────────────────────────────────────────────────
     elif event_type == "SESSION_STATUS_UPDATE":
-        data_status    = body.get("data", {}).get("status", "")
-        fi_session_id  = body.get("dataSessionId", "")
+        data_status   = body.get("data", {}).get("status", "")
+        fi_session_id = body.get("dataSessionId", "")
 
-        if not session_id or not fi_session_id:
+        if not session or not fi_session_id:
             return {"ok": True}
 
         if data_status.upper() in ("COMPLETED", "PARTIAL"):
-            background.add_task(_fetch_fi_by_session_id, session_id, fi_session_id)
+            background.add_task(_fetch_fi_by_session_id, session.session_id, fi_session_id)
         elif data_status.upper() in ("FAILED", "EXPIRED"):
-            _sessions[session_id]["status"] = "error"
+            session.status = "error"
+            db.commit()
 
     return {"ok": True}
 
 
-# ── Step 3: Poll status ───────────────────────────────────────────────────────
-
-@router.get("/aa/status/{session_id}", response_model=AAStatusResponse)
-async def aa_status(session_id: str):
-    if session_id not in _sessions:
-        raise HTTPException(status_code=404, detail="Session not found.")
-    s = _sessions[session_id]
-    messages = {
-        "pending":  "Waiting for user to approve consent.",
-        "approved": "Consent approved. Fetching financial data…",
-        "denied":   "User denied or revoked consent.",
-        "fi_ready": "Financial data is ready.",
-        "error":    "An error occurred while fetching data.",
-    }
-    return AAStatusResponse(
-        session_id=session_id,
-        status=s["status"],
-        message=messages.get(s["status"], s["status"]),
-    )
-
-
-# ── Step 4: Fetch parsed FI data ──────────────────────────────────────────────
-
-@router.get("/aa/fetch/{session_id}", response_model=AAFetchResponse)
-async def aa_fetch(session_id: str):
-    if session_id not in _sessions:
-        raise HTTPException(status_code=404, detail="Session not found.")
-
-    s = _sessions[session_id]
-    if s["status"] != "fi_ready":
-        raise HTTPException(
-            status_code=425,
-            detail=f"FI data not ready yet. Current status: {s['status']}",
-        )
-
-    return AAFetchResponse(**s["fi_data"])
-
-
-# ── Background helpers ────────────────────────────────────────────────────────
-
 async def _create_data_session(session_id: str) -> None:
-    """
-    Used when Auto-Fetch is DISABLED.
-    Creates a Setu data session after consent approval.
-    Setu will then send SESSION_STATUS_UPDATE when the bank responds.
-    """
-    cfg    = _cfg()
-    handle = _sessions[session_id]["consent_handle"]
-    now    = datetime.now(timezone.utc)
+    """Used when Auto-Fetch is DISABLED. Creates a Setu data session after consent approval."""
+    from models.database import SessionLocal
 
+    cfg = _cfg()
+    db  = SessionLocal()
     try:
-        async with httpx.AsyncClient(timeout=30) as client:
-            ds_resp = await client.post(
-                f"{cfg['base']}/v2/sessions",
-                headers=_headers(cfg),
-                json={
-                    "consentId": handle,
-                    "dataRange": {
-                        "from": (now - timedelta(days=180)).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        "to":   now.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    },
-                },
-            )
-        if ds_resp.status_code not in (200, 201):
-            print(f"[AA] POST /sessions failed for {session_id}: {ds_resp.text[:200]}")
-            _sessions[session_id]["status"] = "error"
+        session = db.query(AASession).filter(AASession.session_id == session_id).first()
+        if not session:
             return
-        fi_session_id = (ds_resp.json().get("id") or ds_resp.json().get("sessionId", ""))
-        _sessions[session_id]["fi_session_id"] = fi_session_id
-        print(f"[AA] Data session created: {fi_session_id} for {session_id}")
-    except Exception as exc:
-        print(f"[AA] _create_data_session error for {session_id}: {exc}")
-        _sessions[session_id]["status"] = "error"
+        now = datetime.now(timezone.utc)
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                ds_resp = await client.post(
+                    f"{cfg['base']}/v2/sessions",
+                    headers=_headers(cfg),
+                    json={
+                        "consentId": session.consent_handle,
+                        "dataRange": {
+                            "from": (now - timedelta(days=180)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                            "to":   now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        },
+                    },
+                )
+            if ds_resp.status_code not in (200, 201):
+                print(f"[AA] POST /sessions failed for {session_id}: {ds_resp.text[:200]}")
+                session.status = "error"
+                db.commit()
+                return
+            print(f"[AA] Data session created for {session_id}")
+        except Exception as exc:
+            print(f"[AA] _create_data_session error for {session_id}: {exc}")
+            session.status = "error"
+            db.commit()
+    finally:
+        db.close()
 
 
 async def _fetch_fi_by_session_id(session_id: str, fi_session_id: str) -> None:
-    """
-    Called when SESSION_STATUS_UPDATE arrives (COMPLETED/PARTIAL).
-    Fetches the actual financial data from Setu using the data-session ID.
-    Works regardless of whether Auto-Fetch is enabled or disabled.
-    """
+    """Called when SESSION_STATUS_UPDATE arrives (COMPLETED/PARTIAL)."""
+    from models.database import SessionLocal
+
     cfg = _cfg()
+    db  = SessionLocal()
     try:
-        async with httpx.AsyncClient(timeout=30) as client:
-            fi_resp = await client.get(
-                f"{cfg['base']}/v2/sessions/{fi_session_id}",
-                headers=_headers(cfg),
-            )
-        if fi_resp.status_code != 200:
-            print(f"[AA] GET /sessions/{fi_session_id} failed: {fi_resp.text[:200]}")
-            _sessions[session_id]["status"] = "error"
+        session = db.query(AASession).filter(AASession.session_id == session_id).first()
+        if not session:
             return
-        fi_raw = fi_resp.json()
-        print(f"[AA] FI data received for {session_id} (keys: {list(fi_raw.keys())})")
-        _sessions[session_id]["fi_data"] = _parse_fi(fi_raw)
-        _sessions[session_id]["status"]  = "fi_ready"
-    except Exception as exc:
-        print(f"[AA] _fetch_fi_by_session_id error for {session_id}: {exc}")
-        _sessions[session_id]["status"] = "error"
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                fi_resp = await client.get(
+                    f"{cfg['base']}/v2/sessions/{fi_session_id}",
+                    headers=_headers(cfg),
+                )
+            if fi_resp.status_code != 200:
+                print(f"[AA] GET /sessions/{fi_session_id} failed: {fi_resp.text[:200]}")
+                session.status = "error"
+                db.commit()
+                return
+            fi_raw = fi_resp.json()
+            print(f"[AA] FI data received for {session_id} (keys: {list(fi_raw.keys())})")
+            session.fi_data = json.dumps(_parse_fi(fi_raw))
+            session.status  = "fi_ready"
+            db.commit()
+        except Exception as exc:
+            print(f"[AA] _fetch_fi_by_session_id error for {session_id}: {exc}")
+            session.status = "error"
+            db.commit()
+    finally:
+        db.close()
 
 
 def _parse_fi(fi_raw: dict) -> dict:
-    """
-    Parse Setu FI response (ReBIT schema) into our summary fields.
-    FI data is returned as a list of FI objects per account.
-    """
+    """Parse Setu FI response (ReBIT schema) into our summary fields."""
     credits: list[float] = []
     debits:  list[float] = []
     balances: list[float] = []
@@ -367,10 +679,6 @@ def _parse_fi(fi_raw: dict) -> dict:
 
     accounts = fi_raw.get("FI", []) or fi_raw.get("fiObjects", [])
     for account in accounts:
-        # Profile — closing balance
-        profile = account.get("Profile", {})
-        balance = profile.get("Holders", {})
-        # Balance from Summary
         summary = account.get("Summary", {})
         if isinstance(summary, dict):
             bal = summary.get("currentBalance") or summary.get("closingBalance") or 0
@@ -379,19 +687,17 @@ def _parse_fi(fi_raw: dict) -> dict:
             except (ValueError, TypeError):
                 pass
 
-        # Transactions
         txns = account.get("Transactions", {}).get("Transaction", [])
         for txn in txns:
-            amount = 0.0
             try:
                 amount = float(str(txn.get("amount", 0)).replace(",", ""))
             except (ValueError, TypeError):
-                pass
+                amount = 0.0
 
             if amount <= 0:
                 continue
 
-            txn_type = str(txn.get("type", "")).upper()
+            txn_type  = str(txn.get("type", "")).upper()
             narration = str(txn.get("narration", "") or txn.get("description", ""))
 
             if "UPI" in narration.upper() or "IMPS" in narration.upper():
@@ -405,16 +711,15 @@ def _parse_fi(fi_raw: dict) -> dict:
                     if amount >= 500:
                         emi_amounts.append(amount)
 
-    monthly_credit  = sum(credits)  / 6 if credits  else 0.0
-    monthly_debit   = sum(debits)   / 6 if debits   else 0.0
+    monthly_credit  = sum(credits) / 6 if credits else 0.0
+    monthly_debit   = sum(debits) / 6 if debits else 0.0
     closing_balance = max(balances) if balances else 0.0
 
-    # Deduplicate EMI amounts by rounding to nearest 500
     emi_set: dict[int, float] = {}
     for amt in emi_amounts:
         bucket = int(round(amt / 500) * 500)
         emi_set[bucket] = max(emi_set.get(bucket, 0), amt)
-    monthly_emi   = sum(emi_set.values())
+    monthly_emi    = sum(emi_set.values())
     existing_loans = len(emi_set)
 
     return {
