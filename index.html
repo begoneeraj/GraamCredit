@@ -188,6 +188,33 @@
   </footer>
 
   <script src="lang-config.js"></script>
+
+  <!-- Secret QA shortcut: click "Check Eligibility" 5 times to open the demo/test form -->
+  <script>
+    (function () {
+      const btn = document.getElementById('ctaApply');
+      if (!btn) return;
+      let clicks = 0;
+      let timer = null;
+      const WINDOW_MS = 900;
+
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        clicks++;
+        clearTimeout(timer);
+
+        if (clicks >= 5) {
+          clicks = 0;
+          window.location.href = 'form-demo.html';
+          return;
+        }
+        timer = setTimeout(function () {
+          window.location.href = btn.getAttribute('href');
+          clicks = 0;
+        }, WINDOW_MS);
+      });
+    })();
+  </script>
 </body>
 </html>
 

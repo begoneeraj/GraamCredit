@@ -94,6 +94,21 @@ function initForm() {
   setupConsentListeners();
   setupValidationListeners();
   _resumeAAIfRedirected();
+  _prefillAATestPhone();
+}
+
+// ---- Test persona hand-off (test-personas.html → "Use this number") ----
+function _prefillAATestPhone() {
+  const params = new URLSearchParams(window.location.search);
+  const phone = params.get('aa_test_phone');
+  if (!phone) return;
+
+  window.history.replaceState({}, '', window.location.pathname);
+
+  const vuaInput = document.getElementById('aaVua');
+  if (vuaInput) vuaInput.value = phone;
+
+  showStep(3);
 }
 
 // ---- AA redirect resume ----

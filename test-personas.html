@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Persona Register — GraamCredit</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .tp-wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 72px; }
+
+    .tp-warning {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #FEF3C7; border: 1px solid #F59E0B55; color: #92400E;
+      border-radius: 10px; padding: 13px 16px; font-size: 0.86rem; line-height: 1.5;
+      margin-bottom: 28px;
+    }
+    .tp-warning .mark {
+      flex: none; width: 24px; height: 24px; border-radius: 50%;
+      border: 1.5px solid #92400E; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+    }
+
+    .tp-header { margin-bottom: 22px; }
+    .tp-eyebrow {
+      text-transform: uppercase; letter-spacing: 0.09em; font-size: 0.72rem;
+      color: #6366F1; font-weight: 700; margin: 0 0 6px;
+    }
+    .tp-header h1 { margin: 0 0 8px; font-size: clamp(1.5rem, 4vw, 2rem); color: var(--text-dark); }
+    .tp-header p { margin: 0; color: var(--text-medium); max-width: 62ch; line-height: 1.55; font-size: 0.94rem; }
+
+    .tp-index {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px; margin: 22px 0;
+    }
+    .tp-tab {
+      text-align: left; background: #fff; border: 1px solid var(--border);
+      border-radius: 9px; padding: 9px 12px; cursor: pointer; font-family: inherit;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .tp-tab:hover { border-color: #6366F1; }
+    .tp-tab.active { border-color: #6366F1; background: #F5F3FF; }
+    .tp-tab .phone { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.86rem; color: var(--text-dark); font-variant-numeric: tabular-nums; }
+    .tp-tab .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+    .tp-tab .who { display: block; font-size: 0.74rem; color: var(--text-light); margin-top: 2px; }
+
+    .tp-card {
+      position: relative; background: #fff; border: 1px solid var(--border);
+      border-radius: 14px; box-shadow: 0 1px 2px rgba(10,46,36,.05), 0 8px 24px rgba(10,46,36,.06);
+      padding: 26px; overflow: hidden;
+    }
+    .tp-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--primary); }
+    .tp-top {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+      padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px dashed var(--border);
+    }
+    .tp-top h2 { margin: 0 0 4px; font-size: 1.25rem; color: var(--text-dark); }
+    .tp-top .meta { font-size: 0.84rem; color: var(--text-light); }
+    .tp-stamp {
+      flex: none; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.07em;
+      text-transform: uppercase; padding: 7px 12px; border-radius: 999px;
+      border: 1.5px solid currentColor; transform: rotate(-3deg); white-space: nowrap;
+    }
+    .tp-stamp.ELIGIBLE { color: #0F7A45; background: #E1F5EE; }
+    .tp-stamp.INELIGIBLE { color: #C0392B; background: #FDECEA; }
+    .tp-stamp.BORDERLINE { color: #92600E; background: #FDF3D9; }
+
+    .tp-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 15px 26px; margin-bottom: 18px; }
+    .tp-field dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-light); margin-bottom: 3px; }
+    .tp-field dd { margin: 0; font-size: 0.95rem; color: var(--text-dark); font-variant-numeric: tabular-nums; }
+    .tp-field.wide { grid-column: 1 / -1; }
+
+    .tp-reason { background: #E8F8F2; border-radius: 10px; padding: 12px 14px; font-size: 0.88rem; line-height: 1.5; color: var(--text-dark); }
+    .tp-reason b { color: var(--primary-dark); }
+
+    .tp-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .tp-use-btn {
+      background: #6366F1; color: #fff; border: none; padding: 9px 16px;
+      border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+    }
+    .tp-copy-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text-medium);
+      padding: 8px 13px; border-radius: 8px; font-size: 0.8rem; cursor: pointer;
+    }
+    .tp-copy-btn:hover { border-color: #6366F1; color: #6366F1; }
+
+    .tp-footer { margin-top: 26px; font-size: 0.78rem; color: var(--text-light); text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar (shared with rest of site) -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-icon">G</span>
+        <span>GraamCredit</span>
+      </a>
+      <div class="navbar-links">
+        <a href="how-it-works.html">How it works</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contact-us.html">Contact</a>
+      </div>
+      <div class="navbar-right">
+        <a href="form.html" class="btn btn-primary btn-sm rounded-pill">Apply Now</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tp-wrap">
+
+    <div class="tp-warning">
+      <span class="mark">!</span>
+      <span><strong>Synthetic test data.</strong> Every name, phone number, Aadhaar and PAN below is fabricated for GraamCredit demo/testing only — no real person's information appears here. Do not enter these on any live KYC or government system.</span>
+    </div>
+
+    <div class="tp-header">
+      <p class="tp-eyebrow">GraamCredit · QA Fixtures</p>
+      <h1>Test Persona Register</h1>
+      <p>Six fabricated borrower profiles from Firozabad, Uttar Pradesh, for exercising the mock Account Aggregator flow. Pick a phone number, then click <strong>"Use this number"</strong> to jump straight to Step 3 of the eligibility form with it filled in.</p>
+    </div>
+
+    <nav class="tp-index" id="tpIndex" role="tablist" aria-label="Select a test persona"></nav>
+
+    <section class="tp-card" id="tpCard" aria-live="polite"></section>
+
+    <div class="tp-footer">This page is disposable test data — regenerate or edit the personas in <code>test-personas.html</code> any time.</div>
+  </div>
+
+  <script>
+    const personas = [
+      {
+        phone: "9000000001", name: "Ramesh Kumar", age: 34, city: "Firozabad, Uttar Pradesh",
+        occupation: "Farmer", aadhaar: "2345 6789 0123", pan: "GRAAM1001A",
+        incomeM: 18000, expensesM: 9000, debt: 0, existingLoan: "No",
+        upi: 2, band: "Mid", status: "ELIGIBLE",
+        reason: "Passes every RBI hard rule: income well under the ₹3L cap, zero outstanding debt, no active microloan, valid Aadhaar + PAN on file."
+      },
+      {
+        phone: "9000000002", name: "Sunita Devi", age: 29, city: "Firozabad, Uttar Pradesh",
+        occupation: "Small Vendor", aadhaar: "3567 8901 2345", pan: "GRAAM1002B",
+        incomeM: 15000, expensesM: 8000, debt: 20000, existingLoan: "No",
+        upi: 5, band: "Mid", status: "ELIGIBLE",
+        reason: "Debt ratio 11.1% is comfortably under the 50% ceiling and there's no active microloan — informal family debt doesn't count against the existing-loan rule."
+      },
+      {
+        phone: "9000000003", name: "Manoj Yadav", age: 45, city: "Firozabad, Uttar Pradesh",
+        occupation: "Daily Wage Laborer (Glass Factory)", aadhaar: "2456 7890 1234", pan: "GRAAM1003C",
+        incomeM: 12000, expensesM: 7000, debt: 0, existingLoan: "No",
+        upi: 1, band: "Low", status: "ELIGIBLE",
+        reason: "Lowest income band in the set but clears the cap with room to spare, no debt, no active loan — a clean pass."
+      },
+      {
+        phone: "9000000004", name: "Vikram Singh", age: 38, city: "Firozabad, Uttar Pradesh",
+        occupation: "Bangle Factory Worker", aadhaar: "3678 9012 3456", pan: "GRAAM1004D",
+        incomeM: 20000, expensesM: 11000, debt: 80000, existingLoan: "Yes",
+        upi: 3, band: "Mid", status: "INELIGIBLE",
+        reason: "Debt ratio (33.3%) would clear the cap on its own, but he already holds an active microloan — an automatic fail under the “no existing active loan” rule."
+      },
+      {
+        phone: "9000000005", name: "Anita Sharma", age: 41, city: "Firozabad, Uttar Pradesh",
+        occupation: "Small Vendor", aadhaar: "2789 0123 4567", pan: "GRAAM1005E",
+        incomeM: 22000, expensesM: 14000, debt: 150000, existingLoan: "No",
+        upi: 6, band: "High", status: "INELIGIBLE",
+        reason: "No active loan, but debt ratio comes in at 56.8% — over the 50% RBI ceiling on its own is enough to fail the application."
+      },
+      {
+        phone: "9000000006", name: "Deepak Prajapati", age: 22, city: "Firozabad, Uttar Pradesh",
+        occupation: "Farmer", aadhaar: "3890 1234 5678", pan: "GRAAM1006F",
+        incomeM: 24500, expensesM: 15500, debt: 140000, existingLoan: "No",
+        upi: 4, band: "High", status: "BORDERLINE",
+        reason: "Technically clears the hard rules — debt ratio 47.6%, income just under the ₹3L cap — but both sit close enough to their ceilings to warrant a manual second look before approval."
+      },
+    ];
+
+    const fmtINR = n => "₹" + n.toLocaleString("en-IN");
+    const pct = n => (n * 100).toFixed(1) + "%";
+    const dot = { ELIGIBLE: "#0F7A45", INELIGIBLE: "#C0392B", BORDERLINE: "#92600E" };
+
+    // Sensitive fields (phone/Aadhaar/PAN) are always masked on screen — this is
+    // fabricated test data, but masking it avoids anyone mistaking a screenshot
+    // for a real person's ID.
+    function mask(value, keepStart = 2, keepEnd = 2) {
+      const clean = String(value).replace(/\s+/g, "");
+      if (clean.length <= keepStart + keepEnd) return "*".repeat(clean.length);
+      const maskedLen = Math.max(clean.length - keepStart - keepEnd, 3);
+      return clean.slice(0, keepStart) + "*".repeat(maskedLen) + clean.slice(-keepEnd);
+    }
+
+    const indexEl = document.getElementById("tpIndex");
+    const cardEl  = document.getElementById("tpCard");
+
+    personas.forEach((p, i) => {
+      const btn = document.createElement("button");
+      btn.className = "tp-tab";
+      btn.type = "button";
+      btn.dataset.index = i;
+      btn.innerHTML = `
+        <span class="phone"><span class="dot" style="background:${dot[p.status]}"></span>${mask(p.phone)}</span>
+        <span class="who">${p.name} · ${p.occupation}</span>`;
+      btn.addEventListener("click", () => select(i));
+      indexEl.appendChild(btn);
+    });
+
+    function select(i) {
+      const p = personas[i];
+      [...indexEl.children].forEach((el, idx) => el.classList.toggle("active", idx === i));
+
+      const annualIncome = p.incomeM * 12;
+      const expenseRatio = p.expensesM / p.incomeM;
+      const debtRatio = p.debt / annualIncome;
+
+      cardEl.innerHTML = `
+        <div class="tp-top">
+          <div>
+            <h2>${p.name}</h2>
+            <div class="meta">${p.occupation} · ${p.city} · Age ${p.age}</div>
+          </div>
+          <span class="tp-stamp ${p.status}">${p.status}</span>
+        </div>
+
+        <dl class="tp-fields">
+          <div class="tp-field"><dt>Phone</dt><dd>${mask(p.phone)}</dd></div>
+          <div class="tp-field"><dt>Aadhaar (fake)</dt><dd>${mask(p.aadhaar)}</dd></div>
+          <div class="tp-field"><dt>PAN (fake)</dt><dd>${mask(p.pan)}</dd></div>
+          <div class="tp-field"><dt>Income band</dt><dd>${p.band} <span style="color:var(--text-light)">(within ₹3L cap)</span></dd></div>
+
+          <div class="tp-field"><dt>Monthly income</dt><dd>${fmtINR(p.incomeM)}</dd></div>
+          <div class="tp-field"><dt>Monthly expenses</dt><dd>${fmtINR(p.expensesM)}</dd></div>
+          <div class="tp-field"><dt>Expense ratio</dt><dd>${pct(expenseRatio)}</dd></div>
+          <div class="tp-field"><dt>UPI transactions / day</dt><dd>${p.upi}</dd></div>
+
+          <div class="tp-field"><dt>Existing debt</dt><dd>${fmtINR(p.debt)}</dd></div>
+          <div class="tp-field"><dt>Debt ratio</dt><dd>${pct(debtRatio)}</dd></div>
+          <div class="tp-field"><dt>Active microloan</dt><dd>${p.existingLoan}</dd></div>
+          <div class="tp-field"><dt>Annual income</dt><dd>${fmtINR(annualIncome)}</dd></div>
+
+          <div class="tp-field wide">
+            <dt>Reason</dt>
+            <div class="tp-reason"><b>${p.status}</b> — ${p.reason}</div>
+          </div>
+        </dl>
+
+        <div class="tp-actions">
+          <button class="tp-use-btn" type="button" data-use="${p.phone}">
+            <i class="ri-shield-check-line"></i> Use this number in the form
+          </button>
+          <button class="tp-copy-btn" type="button" data-copy="${p.phone}">Copy phone</button>
+          <button class="tp-copy-btn" type="button" data-copy="${p.aadhaar}">Copy Aadhaar</button>
+          <button class="tp-copy-btn" type="button" data-copy="${p.pan}">Copy PAN</button>
+        </div>
+      `;
+
+      cardEl.querySelector("[data-use]").addEventListener("click", (e) => {
+        window.location.href = `form.html?aa_test_phone=${e.currentTarget.dataset.use}`;
+      });
+      cardEl.querySelectorAll("[data-copy]").forEach(b => {
+        b.addEventListener("click", () => {
+          navigator.clipboard?.writeText(b.dataset.copy).catch(() => {});
+          const orig = b.textContent;
+          b.textContent = "Copied";
+          setTimeout(() => (b.textContent = orig), 1100);
+        });
+      });
+    }
+
+    select(0);
+  </script>
+</body>
+</html>

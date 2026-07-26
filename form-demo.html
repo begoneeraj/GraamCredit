@@ -3,12 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apply — GraamCredit Microloan Eligibility</title>
-  <meta name="description" content="Complete the 5-step application form to check your microloan eligibility with GraamCredit's AI-powered scoring." />
+  <title>Apply (Demo Mode) — GraamCredit</title>
+  <meta name="description" content="Internal QA replica of the GraamCredit application form, pre-loaded with fabricated test personas. Not for real applicants." />
+  <meta name="robots" content="noindex, nofollow" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .demo-banner {
+      background: #FEF3C7;
+      border-bottom: 2px dashed #F59E0B;
+      color: #7A4A0E;
+      text-align: center;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
+    }
+    .demo-pill {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: #F59E0B;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      vertical-align: middle;
+    }
+
+    .persona-picker {
+      background: #F5F3FF;
+      border: 1px dashed #6366F1;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 22px;
+    }
+    .persona-picker-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+    .persona-picker-head i { font-size: 1.3rem; color: #6366F1; margin-top: 1px; }
+    .persona-picker-title { font-weight: 700; color: #4338CA; font-size: 0.94rem; }
+    .persona-picker-sub { font-size: 0.78rem; color: #6B7280; margin-top: 2px; }
+    .persona-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .persona-chip {
+      display: flex; align-items: center; gap: 7px;
+      background: #fff; border: 1px solid #C7D2FE; border-radius: 8px;
+      padding: 7px 11px; cursor: pointer; font-family: inherit;
+      font-size: 0.8rem; color: #1F2937; transition: border-color .15s ease, background .15s ease;
+    }
+    .persona-chip:hover { border-color: #6366F1; }
+    .persona-chip.selected { border-color: #6366F1; background: #EEF2FF; font-weight: 600; }
+    .persona-chip .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+    .persona-picker-status {
+      margin-top: 10px; font-size: 0.8rem; color: #4338CA; min-height: 1.1em;
+    }
+  </style>
 </head>
 <body>
+
+  <div class="demo-banner">🧪 DEMO / TEST MODE — Synthetic data only. Nobody in this form is a real applicant.</div>
 
   <!-- Navbar -->
   <nav class="navbar">
@@ -16,6 +68,7 @@
       <a href="index.html" class="navbar-brand">
         <span class="logo-icon">G</span>
         <span>GraamCredit</span>
+        <span class="demo-pill">DEMO</span>
       </a>
       <div class="navbar-right">
         <button class="lang-toggle-pill" id="langToggle" onclick="toggleLanguage()">
@@ -123,6 +176,18 @@
             <div class="security-notice" id="secNotice2">
               <span class="lock-icon">🔒</span>
               <span data-i18n="securityNotice">Your data is encrypted and stored securely</span>
+            </div>
+
+            <div class="persona-picker" id="personaPicker">
+              <div class="persona-picker-head">
+                <i class="ri-magic-line"></i>
+                <div>
+                  <div class="persona-picker-title">Load a test persona</div>
+                  <div class="persona-picker-sub">Fabricated Firozabad, UP profiles for QA — picking one fills every field below and on the next steps. Phone/Aadhaar are masked on screen.</div>
+                </div>
+              </div>
+              <div class="persona-chip-row" id="personaChips"></div>
+              <div class="persona-picker-status" id="personaStatus"></div>
             </div>
 
             <div class="form-group">
@@ -402,6 +467,140 @@
   <script src="config.js"></script>
   <script src="lang-config.js?v=1.0.1"></script>
   <script src="script.js?v=1.0.1"></script>
+
+  <!-- Demo-mode persona autofill — not part of the production form -->
+  <script>
+    const _demoPersonas = [
+      {
+        phone: "9000000001", name: "Ramesh Kumar", age: 34, gender: "male",
+        aadhaar: "234567890123", employmentType: "farmer", email: "ramesh.kumar1@example.com",
+        incomeM: 18000, expensesM: 9000, debt: 0, existingLoan: "No",
+        savings: 4200, dependents: 2, upi: 2, mobileRecharges: 4, status: "ELIGIBLE",
+      },
+      {
+        phone: "9000000002", name: "Sunita Devi", age: 29, gender: "female",
+        aadhaar: "356789012345", employmentType: "business", email: "sunita.devi2@example.com",
+        incomeM: 15000, expensesM: 8000, debt: 20000, existingLoan: "No",
+        savings: 2800, dependents: 3, upi: 5, mobileRecharges: 3, status: "ELIGIBLE",
+      },
+      {
+        phone: "9000000003", name: "Manoj Yadav", age: 45, gender: "male",
+        aadhaar: "245678901234", employmentType: "laborer", email: "manoj.yadav3@example.com",
+        incomeM: 12000, expensesM: 7000, debt: 0, existingLoan: "No",
+        savings: 1500, dependents: 4, upi: 1, mobileRecharges: 2, status: "ELIGIBLE",
+      },
+      {
+        phone: "9000000004", name: "Vikram Singh", age: 38, gender: "male",
+        aadhaar: "367890123456", employmentType: "laborer", email: "vikram.singh4@example.com",
+        incomeM: 20000, expensesM: 11000, debt: 80000, existingLoan: "Yes",
+        savings: 900, dependents: 2, upi: 3, mobileRecharges: 5, status: "INELIGIBLE",
+      },
+      {
+        phone: "9000000005", name: "Anita Sharma", age: 41, gender: "female",
+        aadhaar: "278901234567", employmentType: "business", email: "anita.sharma5@example.com",
+        incomeM: 22000, expensesM: 14000, debt: 150000, existingLoan: "No",
+        savings: 1100, dependents: 3, upi: 6, mobileRecharges: 4, status: "INELIGIBLE",
+      },
+      {
+        phone: "9000000006", name: "Deepak Prajapati", age: 22, gender: "male",
+        aadhaar: "389012345678", employmentType: "farmer", email: "deepak.prajapati6@example.com",
+        incomeM: 24500, expensesM: 15500, debt: 140000, existingLoan: "No",
+        savings: 1800, dependents: 1, upi: 4, mobileRecharges: 3, status: "BORDERLINE",
+      },
+    ];
+
+    const _statusDot = { ELIGIBLE: "#0F7A45", INELIGIBLE: "#C0392B", BORDERLINE: "#92600E" };
+
+    function _maskSensitive(value, keepStart = 2, keepEnd = 2) {
+      const clean = String(value).replace(/\s+/g, "");
+      if (clean.length <= keepStart + keepEnd) return "*".repeat(clean.length);
+      const maskedLen = Math.max(clean.length - keepStart - keepEnd, 3);
+      return clean.slice(0, keepStart) + "*".repeat(maskedLen) + clean.slice(-keepEnd);
+    }
+
+    function _buildPersonaChips() {
+      const row = document.getElementById("personaChips");
+      if (!row) return;
+      _demoPersonas.forEach((p, i) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "persona-chip";
+        chip.dataset.index = i;
+        chip.innerHTML = `<span class="dot" style="background:${_statusDot[p.status]}"></span>${p.name} · ${_maskSensitive(p.phone)}`;
+        chip.addEventListener("click", () => _loadPersona(i));
+        row.appendChild(chip);
+      });
+    }
+
+    function _loadPersona(i) {
+      const p = _demoPersonas[i];
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+
+      set("fullName", p.name);
+      set("age", p.age);
+      set("gender", p.gender);
+      set("state", "Uttar Pradesh");
+      set("idType", "aadhaar");
+      set("idNumber", _maskSensitive(p.aadhaar));
+      set("applicantEmail", p.email);
+
+      set("annualIncome", p.incomeM * 12);
+      set("monthlyExpenses", p.expensesM);
+      set("existingLoans", p.existingLoan === "Yes" ? 1 : 0);
+      set("monthlyEMI", Math.round(p.debt / 12));
+      set("employment", p.employmentType);
+      set("savingsBalance", p.savings);
+      set("numDependents", p.dependents);
+
+      set("upiTransactions", Math.round(p.upi * 30));
+      set("mobileRecharges", p.mobileRecharges);
+      const shg = document.getElementById("shgToggle");
+      if (shg) shg.checked = false;
+
+      set("aaVua", _maskSensitive(p.phone));
+
+      ["consent1", "consent2", "consent3"].forEach((id) => {
+        const cb = document.getElementById(id);
+        if (!cb) return;
+        cb.checked = true;
+        cb.dispatchEvent(new Event("change"));
+      });
+
+      [...document.getElementById("personaChips").children].forEach((el, idx) => {
+        el.classList.toggle("selected", idx === i);
+      });
+
+      const statusEl = document.getElementById("personaStatus");
+      if (statusEl) {
+        statusEl.innerHTML = `<i class="ri-check-line"></i> Loaded <strong>${p.name}</strong> (${p.status}) — every field is filled in, including Financial and Digital Activity on the next steps. Just click through.`;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", _buildPersonaChips);
+
+    // script.js's Step-2 validator requires a raw 12-digit Aadhaar number, but
+    // this demo page shows the Aadhaar field masked (e.g. "23********23") so a
+    // screenshot never looks like a real ID. Swap in a dummy 12-digit value for
+    // the instant validation runs, then restore the masked value immediately —
+    // the user never sees the swap, and script.js itself is left untouched.
+    if (typeof window.validateStep === "function") {
+      const _origValidateStep = window.validateStep;
+      window.validateStep = function (step) {
+        if (step === 2) {
+          const idTypeEl = document.getElementById("idType");
+          const idNumberEl = document.getElementById("idNumber");
+          if (idTypeEl && idNumberEl && idTypeEl.value === "aadhaar" && /\*/.test(idNumberEl.value)) {
+            const masked = idNumberEl.value;
+            idNumberEl.value = "000000000000";
+            const ok = _origValidateStep(step);
+            idNumberEl.value = masked;
+            return ok;
+          }
+        }
+        return _origValidateStep(step);
+      };
+    }
+  </script>
 </body>
 </html>
 
