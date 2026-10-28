@@ -1,3 +1,7 @@
+<p align="center"><img src="../docs/readme/hero.svg" width="100%" alt="GraamCredit backend" /></p>
+
+[← Project overview](../README.md)
+
 # GraamCredit Backend
 
 FastAPI + SQLite backend for the GraamCredit AI-powered rural microloan eligibility checker.
@@ -39,8 +43,8 @@ The `DATABASE_URL` default (`sqlite:///./graamcredit.db`) works out of the box.
 ```bash
 python ml/train.py
 ```
-This generates 1000 synthetic rows, trains LogisticRegression and RandomForest,
-prints accuracy/AUC-ROC metrics, and saves the better model to `ml/model.pkl`.
+This generates 10,000 synthetic rows, compares classifiers and a stacking ensemble,
+prints evaluation metrics, and saves the selected model to `ml/model.pkl`.
 
 ### 6. Start the server
 ```bash
@@ -90,7 +94,7 @@ shapes, and downstream feature schema the real integration would use. The
 original Setu implementation is preserved (commented, inactive) in the same
 file and can be re-enabled with `USE_MOCK_AA=false` in `.env` plus valid Setu
 credentials — no rewrite required once business KYC is available. In short:
-**production-ready pending business KYC**, working end-to-end today as a demo.
+**a working mock demo**. Validate the real provider integration separately before using live bank data.
 
 ---
 
@@ -130,4 +134,4 @@ graamcredit-backend/
 - For Gmail SMTP, use an **App Password** (not your main password): Google Account → Security → 2-Step Verification → App passwords.
 - The admin panel is at `admin.html` in the frontend folder (direct URL, not in nav).
 - All endpoints return standard HTTP status codes: `201` (created), `400` (validation), `404` (not found), `500` (server error).
-- The DELETE endpoint soft-deletes: it anonymises personal fields but retains score/eligible data for aggregate statistics (DPDP Act compliance).
+- The DELETE endpoint soft-deletes: it anonymises personal fields but retains score/eligible data for aggregate statistics.
